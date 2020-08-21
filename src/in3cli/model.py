@@ -1,3 +1,6 @@
+from in3cli.util import convert_timestamp_to_date_str
+
+
 def create_block_dict(block):
     """Note that this ignores Logs Bloom and Transactions; use separate commands for that."""
     return {
@@ -12,7 +15,12 @@ def create_block_dict(block):
         "Size": block.size,
         "Gas Limit": block.gasLimit,
         "Gas Used": block.gasUsed,
-        "Timestamp": block.timestamp,
+        "Timestamp": convert_timestamp_to_date_str(block.timestamp),
         "Uncles": block.uncles,
         "Author": block.author,
     }
+
+
+class FormatOptions:
+    DEFAULT = "DEFAULT"
+    JSON = "JSON"

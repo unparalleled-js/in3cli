@@ -1,3 +1,6 @@
+import datetime
+import json
+
 import in3
 import click
 
@@ -12,4 +15,15 @@ def get_in3_client():
 
 def print_dict(d):
     for k, v, in d.items():
-        click.echo("{}: {}".format(k, v))
+        if v:
+            click.echo("{}: {}".format(k, v))
+
+
+def print_dict_as_json(json_dict):
+    json_str = json.dumps(json_dict, indent=4)
+    click.echo(json_str)
+
+
+def convert_timestamp_to_date_str(timestamp):
+    date = datetime.datetime.utcfromtimestamp(timestamp)
+    return date.strftime('%Y-%m-%d %H:%M:%S')
