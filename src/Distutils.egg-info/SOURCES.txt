@@ -1,0 +1,7 @@
+setup.py
+src/Distutils.egg-info/PKG-INFO
+src/Distutils.egg-info/SOURCES.txt
+src/Distutils.egg-info/dependency_links.txt
+src/Distutils.egg-info/entry_points.txt
+src/Distutils.egg-info/requires.txt
+src/Distutils.egg-info/top_level.txt
