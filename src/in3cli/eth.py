@@ -16,16 +16,10 @@ def _get_client():
 
 @click.command()
 def show_gas_price():
+    """Prints the current gas price."""
     client = _get_client()
     price = client.gas_price()
     click.echo(price)
-
-
-@click.command()
-def show_block_num():
-    client = _get_client()
-    block_num = client.block_number()
-    click.echo(block_num)
 
 
 @click.command()
@@ -33,18 +27,36 @@ def show_block_num():
 @block_num_option
 @format_option
 def show_block(hash, block_num, format):
-    """Prints the block to th terminal.  If not given any args, will print the latest block."""
+    """Prints a block. If not given any args, will print the latest block."""
     client = _get_client()
-    if hash is not None and block_num is not None:
-        raise In3CliArgumentError(["--hash", "--block-num"])
+    _handle_hash_and_block_num_incompat(hash, block_num)
 
     if hash is not None:
         block = client.block_by_hash(hash)
     else:
         block_num = block_num or client.block_number()
-        block = client.block_by_number(block_num)
+        block = _get_block_by_num(client, block_num)
     block_dict = model.create_block_dict(block)
     _output_block(block_dict, format)
+
+
+@click.command()
+@hash_option
+@block_num_option
+def list_transactions(hash, block_num):
+    client = _get_client()
+    _handle_hash_and_block_num_incompat(hash, block_num)
+    if hash is not None:
+        block = client.block_by_hash(hash)
+    else:
+        block_num = block_num or client.block_number()
+        block = _get_block_by_num(client, block_num)
+    util.print_list(block.transactions)
+
+
+def _handle_hash_and_block_num_incompat(hash, block_num):
+    if hash is not None and block_num is not None:
+        raise In3CliArgumentError(["--hash", "--block-num"])
 
 
 def _get_block_by_num(client, block_num):
@@ -56,6 +68,7 @@ def _get_block_by_num(client, block_num):
         except in3err.ClientException:
             time.sleep(1)
             continue
+    return block
 
 
 def _output_block(block, format_choice):
@@ -71,5 +84,5 @@ def eth():
 
 
 eth.add_command(show_gas_price)
-eth.add_command(show_block_num)
 eth.add_command(show_block)
+eth.add_command(list_transactions)
