@@ -37,7 +37,7 @@ def show_block(hash, block_num, format):
         block_num = block_num or client.block_number()
         block = _get_block_by_num(client, block_num)
     block_dict = model.create_block_dict(block)
-    _output_block(block_dict, format)
+    _output_obj(block_dict, format)
 
 
 @click.command()
@@ -52,6 +52,17 @@ def list_transactions(hash, block_num):
         block_num = block_num or client.block_number()
         block = _get_block_by_num(client, block_num)
     util.print_list(block.transactions)
+
+
+# Does not work that great for newer transaction
+@click.command()
+@hash_option
+def show_transaction(hash):
+    """Prints the transaction for the given hash."""
+    client = _get_client()
+    transaction = client.transaction_by_hash(hash)
+    trans_dict = model.create_transaction_dict(transaction)
+    _output_obj(trans_dict, model.FormatOptions.DEFAULT)
 
 
 def _handle_hash_and_block_num_incompat(hash, block_num):
@@ -71,11 +82,11 @@ def _get_block_by_num(client, block_num):
     return block
 
 
-def _output_block(block, format_choice):
+def _output_obj(obj, format_choice):
     if format_choice == model.FormatOptions.DEFAULT:
-        util.print_dict(block)
+        util.print_dict(obj)
     elif format_choice == model.FormatOptions.JSON:
-        util.print_dict_as_json(block)
+        util.print_dict_as_json(obj)
 
 
 @click.group()
@@ -86,3 +97,4 @@ def eth():
 eth.add_command(show_gas_price)
 eth.add_command(show_block)
 eth.add_command(list_transactions)
+eth.add_command(show_transaction)

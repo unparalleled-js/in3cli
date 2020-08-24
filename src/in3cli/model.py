@@ -21,6 +21,15 @@ def create_block_dict(block):
     }
 
 
+def create_transaction_dict(transaction):
+    return {
+        "Block Hash": transaction.blockHash,
+        "From": transaction.From,
+        "Transaction Index": transaction.transactionIndex,
+        "To": transaction.to,
+    }
+
+
 class FormatOptions:
     DEFAULT = "DEFAULT"
     JSON = "JSON"
