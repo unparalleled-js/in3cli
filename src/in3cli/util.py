@@ -28,9 +28,10 @@ def print_list(items):
     def gen():
         for item in items:
             yield "{}\n".format(item)
+
     click.echo_via_pager(gen)
 
 
 def convert_timestamp_to_date_str(timestamp):
     date = datetime.datetime.utcfromtimestamp(timestamp)
-    return date.strftime('%Y-%m-%d %H:%M:%S')
+    return date.strftime("%Y-%m-%d %H:%M:%S")

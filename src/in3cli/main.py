@@ -13,6 +13,7 @@ def list_nodes():
             yield "url: {}\ndeposit: {}\nweight: {}\nregistered in block: {}\n\n".format(
                 node.url, node.deposit, node.weight, node.registerTime
             )
+
     click.echo_via_pager(gen)
 
 
