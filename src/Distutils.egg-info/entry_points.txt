@@ -1,3 +1,0 @@
-[console_scripts]
-code42 = code42cli.main:cli
-
