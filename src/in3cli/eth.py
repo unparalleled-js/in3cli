@@ -43,7 +43,7 @@ def show_block(hash, block_num, format):
 @click.command()
 @hash_option
 @block_num_option
-def list_transactions(hash, block_num):
+def list_txs(hash, block_num):
     client = _get_client()
     _handle_hash_and_block_num_incompat(hash, block_num)
     if hash is not None:
@@ -56,11 +56,11 @@ def list_transactions(hash, block_num):
 
 @click.command()
 @hash_option
-def show_transaction(hash):
+def show_tx(hash):
     """Prints the transaction for the given hash."""
     client = _get_client()
     transaction = client.transaction_by_hash(hash)
-    trans_dict = model.create_transaction_dict(transaction)
+    trans_dict = model.create_tx_dict(transaction)
     _output_obj(trans_dict, model.FormatOptions.DEFAULT)
 
 
@@ -87,6 +87,8 @@ def _output_obj(obj, format_choice):
         util.print_dict(obj)
     elif format_choice == model.FormatOptions.JSON:
         util.print_dict_as_json(obj)
+    elif format_choice == model.FormatOptions.CSV:
+        util.print_dict_as_csv(obj)
 
 
 @click.group()
@@ -96,6 +98,6 @@ def eth():
 
 eth.add_command(show_gas_price)
 eth.add_command(show_block)
-eth.add_command(list_transactions)
-eth.add_command(show_transaction)
-# TODO: Add send-transaction command
+eth.add_command(list_txs)
+eth.add_command(show_tx)
+# TODO: Add send command

@@ -46,5 +46,4 @@ Options:
 Commands:
   eth
   list-nodes
-
 ```

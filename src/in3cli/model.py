@@ -21,15 +21,27 @@ def create_block_dict(block):
     }
 
 
-def create_transaction_dict(transaction):
+def create_tx_dict(tx):
     return {
-        "Block Hash": transaction.blockHash,
-        "From": transaction.From,
-        "Transaction Index": transaction.transactionIndex,
-        "To": transaction.to,
+        "Block Hash": tx.blockHash,
+        "From": tx.From,
+        "Transaction Index": tx.transactionIndex,
+        "To": tx.to,
+    }
+
+
+def create_node_dict(node):
+    return {
+        "URL": node.url,
+        "Deposit": node.deposit,
+        "Address": node.address,
+        "Weight": node.weight,
+        "Register Time": node.registerTime
     }
 
 
 class FormatOptions:
     DEFAULT = "DEFAULT"
     JSON = "JSON"
+    CSV = "CSV"
+
