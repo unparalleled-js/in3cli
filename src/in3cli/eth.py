@@ -70,7 +70,8 @@ def _handle_hash_and_block_num_incompat(hash, block_num):
 
 
 def _get_block_by_num(client, block_num):
-    """Fixes issue where current block num is not yet available in API."""
+    """Fixes issue where block is not available from initial call."""
+    # TODO: Add timeout
     block = None
     while block is None:
         try:
@@ -97,3 +98,4 @@ eth.add_command(show_gas_price)
 eth.add_command(show_block)
 eth.add_command(list_transactions)
 eth.add_command(show_transaction)
+# TODO: Add send-transaction command

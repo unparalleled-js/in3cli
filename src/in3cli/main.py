@@ -47,3 +47,4 @@ def cli():
 
 cli.add_command(eth)
 cli.add_command(list_nodes)
+# TODO: Add ENS command group
