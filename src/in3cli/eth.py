@@ -54,7 +54,6 @@ def list_transactions(hash, block_num):
     util.print_list(block.transactions)
 
 
-# Does not work that great for newer transaction
 @click.command()
 @hash_option
 def show_transaction(hash):
