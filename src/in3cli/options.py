@@ -13,7 +13,7 @@ format_option = click.option(
     "--format",
     "-f",
     type=click.Choice(
-        [FormatOptions.DEFAULT, FormatOptions.DEFAULT, FormatOptions.CSV],
+        [FormatOptions.DEFAULT, FormatOptions.JSON, FormatOptions.CSV],
         case_sensitive=False,
     ),
     help="Either JSON, CSV, or DEFAULT. DEFAULT just prints line separated values that exist.",
