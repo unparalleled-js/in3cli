@@ -36,7 +36,7 @@ def create_node_dict(node):
         "Deposit": node.deposit,
         "Address": node.address,
         "Weight": node.weight,
-        "Register Time": node.registerTime
+        "Register Time": node.registerTime,
     }
 
 
@@ -44,4 +44,3 @@ class FormatOptions:
     DEFAULT = "DEFAULT"
     JSON = "JSON"
     CSV = "CSV"
-

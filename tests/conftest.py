@@ -35,5 +35,5 @@ def mock_block():
         gasUsed=1000000000000,
         timestamp=1234567889,
         transactions=["TRANS"],
-        uncles=["UNCLES"]
+        uncles=["UNCLES"],
     )

@@ -39,8 +39,8 @@ def convert_dict_to_csv(obj_dict):
 
 
 def convert_list_to_csv(obj_list):
-    print(obj_list)
     fieldnames = list({k for d in obj_list for k in d.keys()})
+    fieldnames.sort()
     writer, string_io = _write_csv_header(fieldnames)
     writer.writerows(obj_list)
     return string_io.getvalue().strip()

@@ -24,7 +24,10 @@ def test_show_gas_price(runner, in3_eth_mock):
 
 def test_show_block_errors_when_given_both_num_and_hash(runner, in3_eth_mock):
     res = runner.invoke(cli, "eth show-block --block-num 123 --hash 456")
-    assert res.output == "Error: The following arguments cannot be used together: --hash, --block-num.\n"
+    assert (
+        res.output
+        == "Error: The following arguments cannot be used together: --hash, --block-num.\n"
+    )
 
 
 def test_show_block_uses_given_block_num(runner, in3_eth_mock, mock_block):
