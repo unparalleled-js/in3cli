@@ -19,7 +19,7 @@ def show_gas_price():
     """Prints the current gas price."""
     client = _get_client()
     price = client.gas_price()
-    click.echo("{} GWei".format(price))
+    click.echo("{} Gwei".format(price))
 
 
 @click.command()

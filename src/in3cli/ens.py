@@ -4,9 +4,9 @@ from in3cli.options import name_option
 from in3cli.util import get_in3_client
 
 
-@click.command()
+@click.command("hash")
 @name_option
-def hash(name):
+def get_hash(name):
     """Convert the ENS name to its hashed version."""
     client = get_in3_client()
     address = _run_with_domain_format_check(lambda: client.ens_namehash(name))
@@ -24,8 +24,8 @@ def resolve(name):
 
 @click.command()
 @name_option
-def whois(name):
-    """Resolve an ENS name to its address."""
+def show_owner(name):
+    """Print the owner of the given name."""
     client = get_in3_client()
     name = _run_with_domain_format_check(lambda: client.ens_owner(name))
     click.echo(name)
@@ -46,6 +46,6 @@ def ens():
 
 
 ens.add_command(resolve)
-ens.add_command(hash)
-ens.add_command(whois)
-# TODO: Support reigstry option
+ens.add_command(get_hash)
+ens.add_command(show_owner)
+# TODO: Support registry option

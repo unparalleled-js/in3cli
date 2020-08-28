@@ -59,7 +59,7 @@ def test_resolve_prints_error_when_not_given_top_level_domain(
 def test_owner_returns_expected_address(mocker, runner, mock_main_in3_client):
     mock_main_in3_client.ens_owner = mocker.MagicMock()
     mock_main_in3_client.ens_owner.return_value = TEST_ADDRESS
-    res = runner.invoke(cli, "ens whois -n {}".format(TEST_DOMAIN_NAME))
+    res = runner.invoke(cli, "ens show-owner -n {}".format(TEST_DOMAIN_NAME))
     assert TEST_ADDRESS in res.output
 
 
@@ -73,5 +73,5 @@ def test_owner_prints_error_when_not_given_top_level_domain(
 
     mock_main_in3_client.ens_owner = mocker.MagicMock()
     mock_main_in3_client.ens_owner.side_effect = side_effect
-    res = runner.invoke(cli, "ens whois -n {}".format(TEST_DOMAIN_NAME))
+    res = runner.invoke(cli, "ens show-owner -n {}".format(TEST_DOMAIN_NAME))
     assert str(EnsDomainNameFormatError()) in res.output

@@ -14,11 +14,12 @@ def get_in3_client():
     return in3.Client(in3_config=config)
 
 
+def wei_to_gwei(wei):
+    return float(wei) / 1000000000
+
+
 def print_dict(d):
-    for (
-        k,
-        v,
-    ) in d.items():
+    for (k, v,) in d.items():
         if v:
             click.echo("{}: {}".format(k, v))
 

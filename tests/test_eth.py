@@ -19,7 +19,7 @@ def test_show_gas_price(runner, in3_eth_mock):
     expected_value = 123456789
     in3_eth_mock.eth.gas_price.return_value = expected_value
     res = runner.invoke(cli, "eth show-gas-price")
-    assert res.output == "{} GWei\n".format(expected_value)
+    assert res.output == "{} Gwei\n".format(expected_value)
 
 
 def test_show_block_errors_when_given_both_num_and_hash(runner, in3_eth_mock):

@@ -1,4 +1,4 @@
-from in3cli.util import convert_timestamp_to_date_str
+import in3cli.util as util
 
 
 def create_block_dict(block):
@@ -15,7 +15,7 @@ def create_block_dict(block):
         "Size": block.size,
         "Gas Limit": block.gasLimit,
         "Gas Used": block.gasUsed,
-        "Timestamp": convert_timestamp_to_date_str(block.timestamp),
+        "Timestamp": util.convert_timestamp_to_date_str(block.timestamp),
         "Uncles": block.uncles,
         "Author": block.author,
     }
@@ -33,10 +33,12 @@ def create_tx_dict(tx):
 def create_node_dict(node):
     return {
         "URL": node.url,
-        "Deposit": node.deposit,
+        "Deposit": "{} Gwei".format(util.wei_to_gwei(node.deposit)),
         "Address": node.address,
         "Weight": node.weight,
-        "Register Time": node.registerTime,
+        "Registration Time": "{}".format(
+            util.convert_timestamp_to_date_str(node.registerTime)
+        ),
     }
 
 
