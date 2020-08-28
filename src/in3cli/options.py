@@ -26,3 +26,10 @@ name_option = click.option(
     "-n",
     help="An ENS domain name."
 )
+
+
+address_option = click.option(
+    "--address",
+    "-a",
+    help="An Ethereum address."
+)
