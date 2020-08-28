@@ -4,6 +4,9 @@ from in3 import client
 from in3.eth.model import Block
 
 
+TEST_ADDRESS = "0x12222f5555f2d32c76cba645297bb2a939577777777777abb749200000000000"
+
+
 @pytest.fixture
 def in3_mock(mocker):
     return mocker.MagicMock(spec=client)

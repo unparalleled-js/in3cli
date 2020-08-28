@@ -19,3 +19,10 @@ format_option = click.option(
     help="Either JSON, CSV, or DEFAULT. DEFAULT just prints line separated values that exist.",
     default=FormatOptions.DEFAULT,
 )
+
+
+name_option = click.option(
+    "--name",
+    "-n",
+    help="An ENS domain name."
+)

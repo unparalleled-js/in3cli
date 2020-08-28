@@ -2,6 +2,7 @@ import click
 
 from in3cli import util
 from in3cli.eth import eth
+from in3cli.ens import ens
 from in3cli.options import format_option
 import in3cli.model as model
 
@@ -33,7 +34,8 @@ _BANNER = """\b
 @format_option
 def list_nodes(format):
     format = format.upper()
-    node_list = util.get_in3_client().refresh_node_list()
+    client = util.get_in3_client()
+    node_list = client.refresh_node_list()
     format_func = _get_format_func(format)
 
     def gen():
@@ -71,4 +73,4 @@ def cli():
 
 cli.add_command(eth)
 cli.add_command(list_nodes)
-# TODO: Add ENS command group
+cli.add_command(ens)

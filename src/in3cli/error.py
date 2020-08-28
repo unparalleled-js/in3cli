@@ -14,3 +14,9 @@ class In3CliArgumentError(In3CliError):
             args_str
         )
         self.message = err_text
+
+
+class TopLevelDomainNotPresentError(In3CliError):
+    def __init__(self):
+        msg = "Missing top-level domain, .eth."
+        super().__init__(msg)
