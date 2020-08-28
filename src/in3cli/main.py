@@ -1,10 +1,9 @@
 import click
-
-from in3cli import util
-from in3cli.eth import eth
-from in3cli.ens import ens
-from in3cli.options import format_option
 import in3cli.model as model
+from in3cli import util
+from in3cli.ens import ens
+from in3cli.eth import eth
+from in3cli.options import format_option
 
 _BANNER = """\b
             @K!m@

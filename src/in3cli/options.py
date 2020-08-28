@@ -21,15 +21,7 @@ format_option = click.option(
 )
 
 
-name_option = click.option(
-    "--name",
-    "-n",
-    help="An ENS domain name."
-)
+name_option = click.option("--name", "-n", help="An ENS domain name.")
 
 
-address_option = click.option(
-    "--address",
-    "-a",
-    help="An Ethereum address."
-)
+address_option = click.option("--address", "-a", help="An Ethereum address.")

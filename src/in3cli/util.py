@@ -3,9 +3,8 @@ import datetime
 import io
 import json
 
-import in3
 import click
-
+import in3
 
 REGISTRY_CONTRACT_ADDRESS = "0x6C095A05764A23156eFD9D603eaDa144a9B1AF33"
 
@@ -16,7 +15,10 @@ def get_in3_client():
 
 
 def print_dict(d):
-    for k, v, in d.items():
+    for (
+        k,
+        v,
+    ) in d.items():
         if v:
             click.echo("{}: {}".format(k, v))
 

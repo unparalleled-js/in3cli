@@ -1,13 +1,13 @@
-import click
-import in3.exception as in3err
 import time
 
-import in3cli.util as util
+import click
+import in3.exception as in3err
 import in3cli.model as model
-from in3cli.options import hash_option
+import in3cli.util as util
+from in3cli.error import In3CliArgumentError
 from in3cli.options import block_num_option
 from in3cli.options import format_option
-from in3cli.error import In3CliArgumentError
+from in3cli.options import hash_option
 
 
 def _get_client():
