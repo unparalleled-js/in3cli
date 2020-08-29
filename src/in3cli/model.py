@@ -34,7 +34,7 @@ def create_node_dict(node):
     return {
         "URL": node.url,
         "Deposit": "{} Gwei".format(util.wei_to_gwei(node.deposit)),
-        "Address": node.address,
+        "Address": node.address.address,
         "Weight": node.weight,
         "Registration Time": "{}".format(
             util.convert_timestamp_to_date_str(node.registerTime)

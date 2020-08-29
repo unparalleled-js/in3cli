@@ -19,7 +19,10 @@ def wei_to_gwei(wei):
 
 
 def print_dict(d):
-    for (k, v,) in d.items():
+    for (
+        k,
+        v,
+    ) in d.items():
         if v:
             click.echo("{}: {}".format(k, v))
 

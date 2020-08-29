@@ -45,7 +45,8 @@ def list_nodes(format):
         else:
             for node in node_list.nodes:
                 node_dict = model.create_node_dict(node)
-                yield "{}\n".format(format_func(node_dict))
+                output = format_func(node_dict)
+                yield "{}\n".format(output)
 
     click.echo_via_pager(gen)
 

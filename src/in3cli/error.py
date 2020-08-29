@@ -16,7 +16,13 @@ class In3CliArgumentError(In3CliError):
         self.message = err_text
 
 
-class EnsDomainNameFormatError(In3CliError):
-    def __init__(self):
-        msg = "Missing top-level domain, .eth."
+class EnsNameFormatError(In3CliError):
+    def __init__(self, name):
+        msg = "Missing top-level domain. Try '{}.eth'.".format(name)
+        super().__init__(msg)
+
+
+class EnsNameNotFoundError(In3CliError):
+    def __init__(self, name):
+        msg = "ENS name '{}' not found.".format(name)
         super().__init__(msg)
