@@ -47,6 +47,7 @@ def _run_with_err_handling(name, func):
 
 @click.group()
 def ens():
+    """Commands for resolving ENS domains."""
     pass
 
 

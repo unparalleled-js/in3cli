@@ -95,6 +95,7 @@ def _output_obj(obj, format_choice):
 
 @click.group()
 def eth():
+    """Commands for interacting with Ethereum."""
     pass
 
 

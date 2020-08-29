@@ -32,6 +32,7 @@ _BANNER = """\b
 @click.command()
 @format_option
 def list_nodes(format):
+    """List Incubed node information."""
     format = format.upper()
     client = util.get_in3_client()
     node_list = client.refresh_node_list()
