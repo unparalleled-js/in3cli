@@ -44,8 +44,17 @@ Options:
   --help  Show this message and exit.
 
 Commands:
+  end
   eth
   list-nodes
+```
+
+## Help
+
+To find the help text for any command, add `--help` anywhere in the command:
+
+```bash
+in3 eth show-block --help
 ```
 
 ## list-nodes
