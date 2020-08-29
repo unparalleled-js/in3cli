@@ -87,3 +87,19 @@ Address,Deposit,Register Time,URL,Weight
 0x945F75c0408C0026a3CD204d36f5e47745182fd4,5010000000000000000,1576224604,https://in3-v2.slock.it/mainnet/nd-3,2000
 ...
 ```
+
+## Ethereum Transactions
+
+List transactions from the block with the latest block number by doing:
+
+```bash
+in3 eth list-txs
+```
+
+You should see a list of transaction hashes.
+
+Pick any transaction hash and use the `show-tx` command to get more information about the hash:
+
+```bash
+in3 eth show-tx -h 0x8f98a2c9064f6b76ef8bfcf8747677715d382ba76c2c1f4890ac4a917097a937
+```
