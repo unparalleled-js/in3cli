@@ -44,6 +44,8 @@ def show_block(hash, block_num, format):
 @hash_option
 @block_num_option
 def list_txs(hash, block_num):
+    """Prints the transactions for the given block.
+    If the block is not specified, uses the latest block number."""
     client = _get_client()
     _handle_hash_and_block_num_incompat(hash, block_num)
     if hash is not None:
