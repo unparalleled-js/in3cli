@@ -12,7 +12,7 @@ setup(
     packages=find_packages("src"),
     package_dir={"": "src"},
     python_requires=">3, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, <4",
-    install_requires=["click>=7.1.1", "in3>=3.0.2"],
+    install_requires=["click>=7.1.1", "in3>=1.0.0", "keyring>=21.4.0"],
     extras_require={
         "dev": [
             "flake8==3.8.3",

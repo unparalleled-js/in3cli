@@ -10,6 +10,7 @@ from in3cli.util import get_in3_client
 def get_hash(name):
     """Convert the ENS name to its hashed version."""
     client = get_in3_client()
+    name = str(name)
     address = _run_with_err_handling(name, lambda: client.ens_namehash(name))
     click.echo(address)
 
@@ -19,6 +20,7 @@ def get_hash(name):
 def resolve(name):
     """Resolve an ENS name to its address."""
     client = get_in3_client()
+    name = str(name)
     name = _run_with_err_handling(name, lambda: client.ens_address(name))
     click.echo(name)
 
@@ -28,6 +30,7 @@ def resolve(name):
 def show_owner(name):
     """Print the owner of the given name."""
     client = get_in3_client()
+    name = str(name)
     name = _run_with_err_handling(name, lambda: client.ens_owner(name))
     click.echo(name)
 
@@ -43,6 +46,8 @@ def _run_with_err_handling(name, func):
         if "resolver not registered" in str(err):
             raise EnsNameNotFoundError(name)
         raise
+    except UnicodeDecodeError:
+        pass
 
 
 @click.group()
