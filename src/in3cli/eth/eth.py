@@ -8,7 +8,7 @@ from in3cli.error import In3CliArgumentError
 from in3cli.options import block_num_option
 from in3cli.options import format_option
 from in3cli.options import hash_option
-#from in3cli.eth.account import
+from in3cli.eth.account import account
 
 
 def _get_client():
@@ -104,5 +104,4 @@ eth.add_command(show_gas_price)
 eth.add_command(show_block)
 eth.add_command(list_txs)
 eth.add_command(show_tx)
-#eth.add_command(account)
-# TODO: Add send command
+eth.add_command(account)

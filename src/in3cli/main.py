@@ -1,3 +1,6 @@
+import signal
+import sys
+
 import click
 import in3cli.model as model
 from in3cli import util
@@ -27,6 +30,15 @@ _BANNER = """\b
            @g= ~k@
              @Q@
 """
+
+
+# Handle KeyboardInterrupts by just exiting instead of printing out a stack
+def exit_on_interrupt(signal, frame):
+    click.echo(err=True)
+    sys.exit(1)
+
+
+signal.signal(signal.SIGINT, exit_on_interrupt)
 
 
 @click.command()
@@ -67,7 +79,13 @@ def _format_node_table_entry(node_dict):
     return builder
 
 
-@click.group(help=_BANNER)
+@click.group(
+    help=_BANNER,
+    context_settings={
+        "help_option_names": ["-h", "--help"],
+        "max_content_width": 200,
+    }
+)
 def cli():
     pass
 
