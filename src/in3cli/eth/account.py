@@ -23,7 +23,7 @@ def add(address):
     secret = getpass("Wallet secret: ")
     keyring.set_password(__PRODUCT_NAME__, address, secret)
     client = get_in3_client()
-    print(client.eth.account.recover(secret))
+    client.eth.account.recover(address)
 
 
 def get_secret(address):

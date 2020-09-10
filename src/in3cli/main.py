@@ -7,6 +7,7 @@ from in3cli import util
 from in3cli.ens import ens
 from in3cli.eth.eth import eth
 from in3cli.options import format_option
+from in3cli.error import _ErrorHandlingGroup
 
 _BANNER = """\b
             @K!m@
@@ -80,6 +81,7 @@ def _format_node_table_entry(node_dict):
 
 
 @click.group(
+    cls=_ErrorHandlingGroup,
     help=_BANNER,
     context_settings={
         "help_option_names": ["-h", "--help"],
