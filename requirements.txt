@@ -1,2 +1,7 @@
-in3
-click
+in3~=2.3.0
+click~=7.1.1
+
+in3cli~=0.1.0
+keyring~=21.4.0
+pytest~=5.4.3
+setuptools~=40.8.0

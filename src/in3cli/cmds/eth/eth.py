@@ -8,7 +8,7 @@ from in3cli.error import In3CliArgumentError
 from in3cli.options import block_num_option
 from in3cli.options import format_option
 from in3cli.options import hash_option
-from in3cli.eth.account import account
+from cmds.eth import account
 
 
 def _get_client():
