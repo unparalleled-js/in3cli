@@ -83,14 +83,13 @@ def _format_node_table_entry(node_dict):
     return builder
 
 
-@click.group(
-    cls=_ErrorHandlingGroup,
-    help=_BANNER,
-    context_settings={
-        "help_option_names": ["-h", "--help"],
-        "max_content_width": 200,
-    },
-)
+_CONTEXT_SETTINGS = {
+    "help_option_names": ["-h", "--help"],
+    "max_content_width": 200,
+}
+
+
+@click.group(cls=_ErrorHandlingGroup, context_settings=_CONTEXT_SETTINGS, help=_BANNER)
 def cli():
     pass
 

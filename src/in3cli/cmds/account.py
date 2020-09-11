@@ -35,7 +35,7 @@ private_key_option = click.option(
 disable_ssl_option = click.option(
     "--disable-ssl-errors",
     is_flag=True,
-    help="For development purposes, do not validate the SSL certificates of in3 servers. "
+    help="For development purposes, do not validate the SSL certifications for network requests. "
     "This is not recommended, except for specific scenarios like testing.",
 )
 
@@ -130,7 +130,7 @@ def delete(account_name):
 
 
 @account.command()
-@yes_option
+#@yes_option
 def delete_all():
     """Deletes all accounts and saved passwords (if any)."""
     existing_accounts = cli_account.get_all_accounts()
