@@ -7,13 +7,13 @@ from click import secho
 import in3cli.account as cli_account
 from in3cli.error import In3CliError
 from in3cli.options import yes_option
-from in3cli.in3client import validate_account
+from in3cli.client import validate_account
 from in3cli.util import does_user_agree
 
 
 @click.group()
 def account():
-    """For managing in3 connection settings."""
+    """For managing In3 wallet settings."""
     pass
 
 
@@ -38,10 +38,10 @@ username_option = click.option(
     help="The username of the in3 API user.",
 )
 
-password_option = click.option(
-    "--password",
-    help="The password for the in3 API user. If this option is omitted, interactive prompts "
-    "will be used to obtain the password.",
+private_key_option = click.option(
+    "--private-key",
+    help="The private key for the wallet to use. It is not recommended to use this option. "
+         "If this option is omitted, interactive prompts will be used to obtain the password.",
 )
 
 disable_ssl_option = click.option(
@@ -55,12 +55,12 @@ disable_ssl_option = click.option(
 @account.command()
 @account_name_arg
 def show(account_name):
-    """Print the details of a account."""
+    """Print the details of an account."""
     c42account = cli_account.get_account(account_name)
     echo("\n{}:".format(c42account.name))
     echo("\t* address = {}".format(c42account.username))
     echo("\t* ignore-ssl-errors = {}".format(c42account.ignore_ssl_errors))
-    if cli_account.get_stored_password(c42account.name) is not None:
+    if cli_account.get_stored_private_key(c42account.name) is not None:
         echo("\t* Private key is set.")
     echo("")
     echo("")
@@ -70,15 +70,15 @@ def show(account_name):
 @name_option
 @server_option
 @username_option
-@password_option
+@private_key_option
 @disable_ssl_option
-def create(name, server, username, password, disable_ssl_errors):
+def create(name, server, username, private_key, disable_ssl_errors):
     """Create account settings. The first account created will be the default."""
     cli_account.create_account(name, server, username, disable_ssl_errors)
-    if password:
-        _set_pw(name, password)
+    if private_key:
+        _set_private_key(name, private_key)
     else:
-        _prompt_for_allow_password_set(name)
+        _prompt_for_allow_private_key_set(name)
     echo("Successfully created account '{}'.".format(name))
 
 
@@ -86,27 +86,27 @@ def create(name, server, username, password, disable_ssl_errors):
 @name_option
 @server_option
 @username_option
-@password_option
+@private_key_option
 @disable_ssl_option
 def update(name, server, username, password, disable_ssl_errors):
     """Update an existing account."""
     c42account = cli_account.get_account(name)
     cli_account.update_account(c42account.name, server, username, disable_ssl_errors)
     if password:
-        _set_pw(name, password)
+        _set_private_key(name, password)
     else:
-        _prompt_for_allow_password_set(c42account.name)
+        _prompt_for_allow_private_key_set(c42account.name)
     echo("account '{}' has been updated.".format(c42account.name))
 
 
 @account.command()
 @account_name_arg
-def reset_pw(account_name):
+def reset_private_key(account_name):
     """\b
     Change the stored password for a account. Only affects what's stored in the local account,
     does not make any changes to the in3 user account."""
     password = getpass()
-    _set_pw(account_name, password)
+    _set_private_key(account_name, password)
     echo("Password updated for account '{}'".format(account_name))
 
 
@@ -161,17 +161,17 @@ def delete_all():
         echo("\nNo accounts exist. Nothing to delete.")
 
 
-def _prompt_for_allow_password_set(account_name):
+def _prompt_for_allow_private_key_set(account_name):
     if does_user_agree("Would you like to set a password? (y/n): "):
         password = getpass()
-        _set_pw(account_name, password)
+        _set_private_key(account_name, password)
 
 
-def _set_pw(account_name, password):
+def _set_private_key(account_name, password):
     c42account = cli_account.get_account(account_name)
     try:
         validate_account(c42account)
     except Exception:
         secho("Password not stored!", bold=True)
         raise
-    cli_account.set_password(password, c42account.name)
+    cli_account.set_private_key(password, c42account.name)

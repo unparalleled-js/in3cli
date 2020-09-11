@@ -4,10 +4,13 @@ import sys
 import click
 import in3cli.model as model
 from in3cli import util
-from cmds.ens import ens
-from cmds.eth import eth
+from in3cli.cmds.ens import ens
+from in3cli.cmds.eth.eth import eth
+from in3cli.cmds.account import account
 from in3cli.options import format_option
 from in3cli.error import _ErrorHandlingGroup
+from in3cli.client import get_in3_client
+
 
 _BANNER = """\b
             @K!m@
@@ -18,7 +21,7 @@ _BANNER = """\b
   @o,  ~6     @    @%^  .zQ
  S,  `X     W< ~X    @m,  .JQ
  K;  `}Q  8=`    ~X  @x.  :w@
-  @QL` `|B@y~\Qy,  'nQ#|@@
+  @QL` `|B@y~|Qy,  'nQ#|@@
     @&;  `|B     y,  '6@@
    @ky@&|`  ;q W7q@ !  'nQ@
  @U~  |@@&|`  ~`  f  d,  '}Q@
@@ -47,7 +50,7 @@ signal.signal(signal.SIGINT, exit_on_interrupt)
 def list_nodes(format):
     """List Incubed node information."""
     format = format.upper()
-    client = util.get_in3_client()
+    client = get_in3_client()
     node_list = client.refresh_node_list()
     format_func = _get_format_func(format)
 
@@ -95,3 +98,4 @@ def cli():
 cli.add_command(eth)
 cli.add_command(list_nodes)
 cli.add_command(ens)
+cli.add_command(account)

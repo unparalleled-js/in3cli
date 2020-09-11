@@ -25,8 +25,8 @@ class In3Account:
 
     @property
     def has_stored_private_key(self):
-        stored_password = config_accessor.get_stored_private_key(self)
-        return stored_password is not None and stored_password != ""
+        stored_key = config_accessor.get_stored_private_key(self)
+        return stored_key is not None and stored_key != ""
 
     def get_private_key(self):
         pwd = private_key.get_stored_private_key(self)
@@ -98,7 +98,7 @@ def create_account(name, server, username, ignore_ssl_errors):
 def delete_account(account_name):
     account = _get_account(account_name)
     if private_key.get_stored_private_key(account) is not None:
-        private_key.delete_password(account)
+        private_key.delete_private_key(account)
     config_accessor.delete_account(account_name)
 
 
@@ -111,14 +111,14 @@ def get_all_accounts():
     return accounts
 
 
-def get_stored_password(account_name=None):
+def get_stored_private_key(account_name=None):
     account = get_account(account_name)
     return private_key.get_stored_private_key(account)
 
 
-def set_password(new_password, account_name=None):
+def set_private_key(new_private_key, account_name=None):
     account = get_account(account_name)
-    private_key.set_private_key(account, new_password)
+    private_key.set_private_key(account, new_private_key)
 
 
 CREATE_ACCOUNT_HELP = "\nTo add an account, use:\n{}".format(

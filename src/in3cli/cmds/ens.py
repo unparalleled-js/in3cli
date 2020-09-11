@@ -2,7 +2,7 @@ import click
 from in3 import ClientException
 from in3cli.error import EnsNameFormatError, EnsNameNotFoundError
 from in3cli.options import name_option
-from in3cli.util import get_in3_client
+from in3cli.client import get_in3_client
 
 
 @click.command("hash")

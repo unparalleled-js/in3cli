@@ -27,8 +27,8 @@ def set_private_key(profile, new_password):
     keyring.set_password(service_name, profile.username, new_password)
 
 
-def delete_password(profile):
-    """Deletes password for the given profile name."""
+def delete_private_key(profile):
+    """Deletes the private key for the given profile name."""
     service_name = _get_keyring_service_name(profile.name)
     keyring.delete_password(service_name, profile.username)
 
