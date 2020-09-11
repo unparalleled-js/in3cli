@@ -45,13 +45,11 @@ disable_ssl_option = click.option(
 def show(account_name):
     """Print the details of an account."""
     in3account = cli_account.get_account(account_name)
-    echo("\n{}:".format(in3account.name))
-    echo("\t* address = {}".format(in3account.address))
-    echo("\t* ignore-ssl-errors = {}".format(in3account.ignore_ssl_errors))
+    echo("{}:".format(in3account.name))
+    echo("\tAddress: {}".format(in3account.address))
+    echo("\tIgnore SSL Errors: {}".format(in3account.ignore_ssl_errors))
     if cli_account.get_stored_private_key(in3account.name) is not None:
         echo("\t* Private key is set.")
-    echo("")
-    echo("")
 
 
 @account.command()
@@ -148,7 +146,7 @@ def delete_all():
 
 
 def _prompt_for_allow_private_key_set(account_name):
-    if does_user_agree("Would you like to set a password? (y/n): "):
+    if does_user_agree("Would you like to store or update your private key in keyring? (y/n): "):
         private_key = get_private_key_from_prompt()
         _set_private_key(account_name, private_key)
 

@@ -95,3 +95,17 @@ def get_user_project_path(*subdirs):
     if not path.exists(result_path):
         os.makedirs(result_path)
     return result_path
+
+
+def str_to_bool(val):
+    def _error():
+        raise ValueError("val must be either 't', 'true', 'f', or 'false'. Not {}.".format(val))
+
+    val = val.lower()
+    if not isinstance(val, str):
+        _error()
+    elif val in ["true", "t"]:
+        return True
+    elif val in ["false", "f"]:
+        return False
+    _error()

@@ -1,3 +1,3 @@
 import click
 
-name_option = click.option("--name", "-n", help="An ENS domain name.")
+name_arg = click.argument("name")

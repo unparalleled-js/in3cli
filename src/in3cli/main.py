@@ -11,7 +11,7 @@ from in3cli.cmds.ens.ens import ens
 from in3cli.cmds.eth.eth import eth
 from in3cli.error import _ErrorHandlingGroup
 from in3cli.options import format_option
-from in3cli.options import account_options
+from in3cli.options import client_options
 
 _BANNER = """\b
             @K!m@
@@ -91,7 +91,7 @@ _CONTEXT_SETTINGS = {
 
 
 @click.group(cls=_ErrorHandlingGroup, context_settings=_CONTEXT_SETTINGS, help=_BANNER)
-@account_options(hidden=True)
+@client_options(hidden=True)
 def cli(state):
     pass
 

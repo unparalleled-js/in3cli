@@ -5,6 +5,7 @@ from in3cli.client import create_client
 from in3cli.error import In3CliError
 from in3cli.model import FormatOptions
 
+
 yes_option = click.option(
     "-y",
     "--assume-yes",
@@ -13,14 +14,9 @@ yes_option = click.option(
     callback=lambda ctx, param, value: ctx.obj.set_assume_yes(value),
     help='Assume "yes" as the answer to all prompts and run non-interactively.',
 )
-
-
 hash_option = click.option("--hash", "-h", help="A block hash.")
-
-
+hash_arg = click.argument("hash")
 block_num_option = click.option("--block-num", "-b", help="A block number.")
-
-
 format_option = click.option(
     "--format",
     "-f",
@@ -31,8 +27,6 @@ format_option = click.option(
     help="Either JSON, CSV, or DEFAULT. DEFAULT just prints line separated values that exist.",
     default=FormatOptions.DEFAULT,
 )
-
-
 address_option = click.option("--address", "-a", help="An Ethereum address.")
 
 
@@ -86,7 +80,7 @@ def account_option(hidden=False):
 pass_state = click.make_pass_decorator(CliState, ensure=True)
 
 
-def account_options(hidden=False):
+def client_options(hidden=False):
     def decorator(f):
         f = account_option(hidden)(f)
         f = pass_state(f)

@@ -5,23 +5,19 @@ import in3.exception as in3err
 
 import in3cli.model as model
 import in3cli.util as util
-from in3cli.client import create_client
-from in3cli.cmds.account import account
 from in3cli.error import In3CliArgumentError
 from in3cli.options import block_num_option
 from in3cli.options import format_option
 from in3cli.options import hash_option
-
-
-def _get_client():
-    return create_client().eth
+from in3cli.options import hash_arg
+from in3cli.options import client_options
 
 
 @click.command()
-def show_gas_price():
+@client_options()
+def show_gas_price(state):
     """Prints the current gas price."""
-    client = _get_client()
-    price = client.gas_price()
+    price = state.client.eth.gas_price()
     click.echo("{} Gwei".format(price))
 
 
@@ -29,9 +25,10 @@ def show_gas_price():
 @hash_option
 @block_num_option
 @format_option
-def show_block(hash, block_num, format):
+@client_options()
+def show_block(state, hash, block_num, format):
     """Prints a block. If not given any args, will print the latest block."""
-    client = _get_client()
+    client = state.client.eth
     _handle_hash_and_block_num_incompat(hash, block_num)
 
     if hash is not None:
@@ -46,10 +43,11 @@ def show_block(hash, block_num, format):
 @click.command()
 @hash_option
 @block_num_option
-def list_txs(hash, block_num):
+@client_options()
+def list_txs(state, hash, block_num):
     """Prints the transactions for the given block.
     If the block is not specified, uses the latest block number."""
-    client = _get_client()
+    client = state.client.eth
     _handle_hash_and_block_num_incompat(hash, block_num)
     if hash is not None:
         block = client.block_by_hash(hash)
@@ -60,10 +58,11 @@ def list_txs(hash, block_num):
 
 
 @click.command()
-@hash_option
-def show_tx(hash):
+@hash_arg
+@client_options()
+def show_tx(state, hash):
     """Prints the transaction for the given hash."""
-    client = _get_client()
+    client = state.client.eth
     transaction = client.transaction_by_hash(hash)
     trans_dict = model.create_tx_dict(transaction)
     _output_obj(trans_dict, model.FormatOptions.DEFAULT)
@@ -106,4 +105,3 @@ eth.add_command(show_gas_price)
 eth.add_command(show_block)
 eth.add_command(list_txs)
 eth.add_command(show_tx)
-eth.add_command(account)

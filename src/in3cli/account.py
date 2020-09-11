@@ -5,6 +5,7 @@ from in3cli.config import ConfigAccessor
 from in3cli.config import NoConfigAccountError
 from in3cli.config import config_accessor
 from in3cli.error import In3CliError
+from in3cli.util import str_to_bool
 
 
 class In3Account:
@@ -21,7 +22,8 @@ class In3Account:
 
     @property
     def ignore_ssl_errors(self):
-        return self._account[ConfigAccessor.IGNORE_SSL_ERRORS_KEY]
+        stored_value = self._account[ConfigAccessor.IGNORE_SSL_ERRORS_KEY]
+        return str_to_bool(stored_value)
 
     @property
     def has_stored_private_key(self):
