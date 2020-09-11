@@ -2,18 +2,19 @@ import time
 
 import click
 import in3.exception as in3err
+
 import in3cli.model as model
 import in3cli.util as util
-from in3cli.client import get_in3_client
+from in3cli.client import create_client
+from in3cli.cmds.account import account
 from in3cli.error import In3CliArgumentError
 from in3cli.options import block_num_option
 from in3cli.options import format_option
 from in3cli.options import hash_option
-from in3cli.cmds.account import account
 
 
 def _get_client():
-    return get_in3_client().eth
+    return create_client().eth
 
 
 @click.command()

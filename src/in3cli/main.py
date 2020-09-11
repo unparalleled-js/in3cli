@@ -2,15 +2,15 @@ import signal
 import sys
 
 import click
+
 import in3cli.model as model
 from in3cli import util
-from in3cli.cmds.ens import ens
-from in3cli.cmds.eth.eth import eth
+from in3cli.client import create_client
 from in3cli.cmds.account import account
-from in3cli.options import format_option
+from in3cli.cmds.ens.ens import ens
+from in3cli.cmds.eth.eth import eth
 from in3cli.error import _ErrorHandlingGroup
-from in3cli.client import get_in3_client
-
+from in3cli.options import format_option
 
 _BANNER = """\b
             @K!m@
@@ -50,7 +50,7 @@ signal.signal(signal.SIGINT, exit_on_interrupt)
 def list_nodes(format):
     """List Incubed node information."""
     format = format.upper()
-    client = get_in3_client()
+    client = create_client()
     node_list = client.refresh_node_list()
     format_func = _get_format_func(format)
 

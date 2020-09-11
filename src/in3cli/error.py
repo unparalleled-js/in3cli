@@ -4,7 +4,6 @@ import re
 import click
 from in3.exception import IN3BaseException
 
-
 _DIFFLIB_CUT_OFF = 0.6
 
 

@@ -1,9 +1,9 @@
 from click import style
 
 import in3cli.private_key as private_key
-from in3cli.config import config_accessor
 from in3cli.config import ConfigAccessor
 from in3cli.config import NoConfigAccountError
+from in3cli.config import config_accessor
 from in3cli.error import In3CliError
 
 

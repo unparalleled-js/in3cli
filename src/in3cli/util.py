@@ -1,12 +1,11 @@
-import os
 import csv
 import datetime
 import io
 import json
+import os
 from os import path
 
 import click
-import in3
 
 REGISTRY_CONTRACT_ADDRESS = "0x6C095A05764A23156eFD9D603eaDa144a9B1AF33"
 

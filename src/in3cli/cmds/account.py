@@ -5,12 +5,12 @@ from click import echo
 from click import secho
 
 import in3cli.account as cli_account
-from in3cli.error import In3CliError
-from in3cli.options import yes_option
 from in3cli.client import validate_account
-from in3cli.util import does_user_agree
+from in3cli.error import In3CliError
 from in3cli.options import address_option
+from in3cli.options import yes_option
 from in3cli.private_key import get_private_key_from_prompt
+from in3cli.util import does_user_agree
 
 
 @click.group()
@@ -59,7 +59,6 @@ def show(account_name):
 @address_option
 @private_key_option
 @disable_ssl_option
-@yes_option
 def create(name, address, private_key, disable_ssl_errors):
     """Create account settings. The first account created will be the default."""
     cli_account.create_account(name, address, disable_ssl_errors)

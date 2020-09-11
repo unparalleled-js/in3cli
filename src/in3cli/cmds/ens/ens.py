@@ -1,15 +1,16 @@
 import click
 from in3 import ClientException
+
+from in3cli.client import create_client
+from in3cli.cmds.ens.options import name_option
 from in3cli.error import EnsNameFormatError, EnsNameNotFoundError
-from in3cli.options import name_option
-from in3cli.client import get_in3_client
 
 
 @click.command("hash")
 @name_option
 def get_hash(name):
     """Convert the ENS name to its hashed version."""
-    client = get_in3_client()
+    client = create_client()
     name = str(name)
     address = _run_with_err_handling(name, lambda: client.ens_namehash(name))
     click.echo(address)
@@ -19,7 +20,7 @@ def get_hash(name):
 @name_option
 def resolve(name):
     """Resolve an ENS name to its address."""
-    client = get_in3_client()
+    client = create_client()
     name = str(name)
     name = _run_with_err_handling(name, lambda: client.ens_address(name))
     click.echo(name)
@@ -29,7 +30,7 @@ def resolve(name):
 @name_option
 def show_owner(name):
     """Print the owner of the given name."""
-    client = get_in3_client()
+    client = create_client()
     name = str(name)
     name = _run_with_err_handling(name, lambda: client.ens_owner(name))
     click.echo(name)
