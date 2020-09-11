@@ -130,7 +130,7 @@ def delete(account_name):
 
 
 @account.command()
-#@yes_option
+@yes_option
 def delete_all():
     """Deletes all accounts and saved passwords (if any)."""
     existing_accounts = cli_account.get_all_accounts()
