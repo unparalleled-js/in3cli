@@ -89,10 +89,10 @@ def switch_default_account(account_name):
     config_accessor.switch_default_account(account.name)
 
 
-def create_account(name, server, username, ignore_ssl_errors):
+def create_account(name, address, ignore_ssl_errors):
     if account_exists(name):
         raise In3CliError("an account named '{}' already exists.".format(name))
-    config_accessor.create_account(name, server, username, ignore_ssl_errors)
+    config_accessor.create_account(name, address, ignore_ssl_errors)
 
 
 def delete_account(account_name):
@@ -102,8 +102,8 @@ def delete_account(account_name):
     config_accessor.delete_account(account_name)
 
 
-def update_account(name, server, username, ignore_ssl_errors):
-    config_accessor.update_account(name, server, username, ignore_ssl_errors)
+def update_account(name, address, ignore_ssl_errors):
+    config_accessor.update_account(name, address, ignore_ssl_errors)
 
 
 def get_all_accounts():
@@ -123,7 +123,7 @@ def set_private_key(new_private_key, account_name=None):
 
 CREATE_ACCOUNT_HELP = "\nTo add an account, use:\n{}".format(
     style(
-        "\tin3 account create --name <account-name> --address <username>\n",
+        "\tin3 account create --name <account-name> --address <address>\n",
         bold=True,
     )
 )

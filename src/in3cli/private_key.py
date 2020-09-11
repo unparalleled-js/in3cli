@@ -7,30 +7,30 @@ from in3cli.util import does_user_agree
 
 
 def get_stored_private_key(profile):
-    """Gets your currently stored password for the given profile name."""
+    """Gets your currently stored private key for the given profile."""
     service_name = _get_keyring_service_name(profile.name)
-    return keyring.get_password(service_name, profile.username)
+    return keyring.get_password(service_name, profile.address)
 
 
 def get_private_key_from_prompt():
     """Prompts you and returns what you input."""
-    return getpass()
+    return getpass(prompt="Private key: ")
 
 
-def set_private_key(profile, new_password):
-    """Sets your password for the given profile name."""
-    service_name = _get_keyring_service_name(profile.name)
+def set_private_key(account, new_key):
+    """Sets your private key for the given account."""
+    service_name = _get_keyring_service_name(account.name)
     uses_file_storage = keyring.get_keyring().priority < 1
     if uses_file_storage and not _prompt_for_alternative_store():
         return
 
-    keyring.set_password(service_name, profile.username, new_password)
+    keyring.set_password(service_name, account.address, new_key)
 
 
 def delete_private_key(profile):
-    """Deletes the private key for the given profile name."""
+    """Deletes the private key for the given profile."""
     service_name = _get_keyring_service_name(profile.name)
-    keyring.delete_password(service_name, profile.username)
+    keyring.delete_password(service_name, profile.address)
 
 
 def _get_keyring_service_name(profile_name):

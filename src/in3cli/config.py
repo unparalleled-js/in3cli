@@ -50,7 +50,7 @@ class ConfigAccessor:
             accounts.append(self.get_account(name))
         return accounts
 
-    def create_account(self, name, username, ignore_ssl_errors):
+    def create_account(self, name, address, ignore_ssl_errors):
         """Creates a new account if one does not already exist for that name."""
         try:
             self.get_account(name)
@@ -61,13 +61,13 @@ class ConfigAccessor:
                 raise ex
 
         account = self.get_account(name)
-        self.update_account(account.name, username, ignore_ssl_errors)
+        self.update_account(account.name, address, ignore_ssl_errors)
         self._try_complete_setup(account)
 
-    def update_account(self, name, username=None, ignore_ssl_errors=None):
+    def update_account(self, name, address=None, ignore_ssl_errors=None):
         account = self.get_account(name)
-        if username:
-            self._set_username(username, account)
+        if address:
+            self._set_address(address, account)
         if ignore_ssl_errors is not None:
             self._set_ignore_ssl_errors(ignore_ssl_errors, account)
         self._save()
@@ -88,7 +88,7 @@ class ConfigAccessor:
             self._internal[self.DEFAULT_account] = self.DEFAULT_VALUE
         self._save()
 
-    def _set_username(self, new_value, account):
+    def _set_address(self, new_value, account):
         account[self.ADDRESS_KEY] = new_value.strip()
 
     def _set_ignore_ssl_errors(self, new_value, account):
@@ -129,13 +129,10 @@ class ConfigAccessor:
             self.parser.write(file)
 
     def _try_complete_setup(self, account):
-        username = account.get(self.ADDRESS_KEY)
-        username_valid = username and username != self.DEFAULT_VALUE
-        if not username_valid:
+        address = account.get(self.ADDRESS_KEY)
+        if not address or address == self.DEFAULT_VALUE:
             return
-
         self._save()
-
         default_account = self._internal.get(self.DEFAULT_account)
         if default_account is None or default_account == self.DEFAULT_VALUE:
             self.switch_default_account(account.name)
