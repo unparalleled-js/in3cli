@@ -7,7 +7,7 @@ import tests.conftest as tconf
 
 @pytest.fixture
 def mock_main_in3_client(mocker, in3_mock):
-    mock = mocker.patch("in3cli.main.util.get_in3_client")
+    mock = mocker.patch("in3cli.main.get_in3_client")
     mock.return_value = in3_mock
     return in3_mock
 

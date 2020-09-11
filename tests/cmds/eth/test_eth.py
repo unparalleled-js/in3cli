@@ -9,7 +9,7 @@ def in3_eth_mock(mocker, in3_mock):
     in3_mock.eth = eth_mock
 
     # Inject into eth module
-    mock_getter = mocker.patch("in3cli.eth._get_client")
+    mock_getter = mocker.patch("in3cli.cmds.eth.eth._get_client")
     mock_getter.return_value = eth_mock
 
     return in3_mock
