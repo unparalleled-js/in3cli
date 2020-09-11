@@ -1,9 +1,9 @@
 from click import style
 
-from in3cli.cmds.search.cursor_store import get_all_cursor_stores_for_account
+import in3cli.private_key as private_key
 from in3cli.config import config_accessor
 from in3cli.config import ConfigAccessor
-from in3cli.config import NoConfigaccountError
+from in3cli.config import NoConfigAccountError
 from in3cli.error import In3CliError
 
 
@@ -29,9 +29,9 @@ class In3Account:
         return stored_password is not None and stored_password != ""
 
     def get_private_key(self):
-        pwd = password.get_stored_private_key(self)
+        pwd = private_key.get_stored_private_key(self)
         if not pwd:
-            pwd = password.get_private_key_from_prompt()
+            pwd = private_key.get_private_key_from_prompt()
         return pwd
 
     def __str__(self):
@@ -49,7 +49,7 @@ def get_account(account_name=None):
         validate_default_account()
     try:
         return _get_account(account_name)
-    except NoConfigaccountError as ex:
+    except NoConfigAccountError as ex:
         raise In3CliError(str(ex))
 
 
@@ -57,7 +57,7 @@ def default_account_exists():
     try:
         account = _get_account()
         return account.name and account.name != ConfigAccessor.DEFAULT_VALUE
-    except NoConfigaccountError:
+    except NoConfigAccountError:
         return False
 
 
@@ -80,7 +80,7 @@ def account_exists(account_name=None):
     try:
         _get_account(account_name)
         return True
-    except NoConfigaccountError:
+    except NoConfigAccountError:
         return False
 
 
@@ -97,11 +97,8 @@ def create_account(name, server, username, ignore_ssl_errors):
 
 def delete_account(account_name):
     account = _get_account(account_name)
-    if password.get_stored_private_key(account) is not None:
-        password.delete_password(account)
-    cursor_stores = get_all_cursor_stores_for_account(account_name)
-    for store in cursor_stores:
-        store.clean()
+    if private_key.get_stored_private_key(account) is not None:
+        private_key.delete_password(account)
     config_accessor.delete_account(account_name)
 
 
@@ -116,12 +113,12 @@ def get_all_accounts():
 
 def get_stored_password(account_name=None):
     account = get_account(account_name)
-    return password.get_stored_private_key(account)
+    return private_key.get_stored_private_key(account)
 
 
 def set_password(new_password, account_name=None):
     account = get_account(account_name)
-    password.set_private_key(account, new_password)
+    private_key.set_private_key(account, new_password)
 
 
 CREATE_ACCOUNT_HELP = "\nTo add an account, use:\n{}".format(
