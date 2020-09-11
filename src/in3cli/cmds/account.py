@@ -4,11 +4,10 @@ import click
 from click import echo
 from click import secho
 
-import in3cli.account as cliaccount
-from in3cli.error import in3CLIError
+import in3cli.account as cli_account
+from in3cli.error import In3CliError
 from in3cli.options import yes_option
-from in3cli.account import CREATE_account_HELP
-from in3cli.util import validate_account
+from in3cli.in3client import validate_account
 from in3cli.util import does_user_agree
 
 
@@ -57,13 +56,12 @@ disable_ssl_option = click.option(
 @account_name_arg
 def show(account_name):
     """Print the details of a account."""
-    c42account = cliaccount.get_account(account_name)
+    c42account = cli_account.get_account(account_name)
     echo("\n{}:".format(c42account.name))
-    echo("\t* username = {}".format(c42account.username))
-    echo("\t* authority url = {}".format(c42account.authority_url))
+    echo("\t* address = {}".format(c42account.username))
     echo("\t* ignore-ssl-errors = {}".format(c42account.ignore_ssl_errors))
-    if cliaccount.get_stored_password(c42account.name) is not None:
-        echo("\t* A password is set.")
+    if cli_account.get_stored_password(c42account.name) is not None:
+        echo("\t* Private key is set.")
     echo("")
     echo("")
 
@@ -76,7 +74,7 @@ def show(account_name):
 @disable_ssl_option
 def create(name, server, username, password, disable_ssl_errors):
     """Create account settings. The first account created will be the default."""
-    cliaccount.create_account(name, server, username, disable_ssl_errors)
+    cli_account.create_account(name, server, username, disable_ssl_errors)
     if password:
         _set_pw(name, password)
     else:
@@ -92,8 +90,8 @@ def create(name, server, username, password, disable_ssl_errors):
 @disable_ssl_option
 def update(name, server, username, password, disable_ssl_errors):
     """Update an existing account."""
-    c42account = cliaccount.get_account(name)
-    cliaccount.update_account(c42account.name, server, username, disable_ssl_errors)
+    c42account = cli_account.get_account(name)
+    cli_account.update_account(c42account.name, server, username, disable_ssl_errors)
     if password:
         _set_pw(name, password)
     else:
@@ -115,9 +113,9 @@ def reset_pw(account_name):
 @account.command("list")
 def _list():
     """Show all existing stored accounts."""
-    accounts = cliaccount.get_all_accounts()
+    accounts = cli_account.get_all_accounts()
     if not accounts:
-        raise in3CLIError("No existing account.", help=CREATE_account_HELP)
+        raise In3CliError("No existing account.")
     for c42account in accounts:
         echo(str(c42account))
 
@@ -126,7 +124,7 @@ def _list():
 @account_name_arg
 def use(account_name):
     """Set a account as the default."""
-    cliaccount.switch_default_account(account_name)
+    cli_account.switch_default_account(account_name)
     echo("{} has been set as the default account.".format(account_name))
 
 
@@ -136,12 +134,12 @@ def use(account_name):
 def delete(account_name):
     """Deletes a account and its stored password (if any)."""
     message = "\nDeleting this account will also delete any stored passwords and checkpoints. Are you sure? (y/n): "
-    if cliaccount.is_default_account(account_name):
+    if cli_account.is_default_account(account_name):
         message = "\n'{}' is currently the default account!\n{}".format(
             account_name, message
         )
     if does_user_agree(message):
-        cliaccount.delete_account(account_name)
+        cli_account.delete_account(account_name)
         echo("account '{}' has been deleted.".format(account_name))
 
 
@@ -149,7 +147,7 @@ def delete(account_name):
 @yes_option
 def delete_all():
     """Deletes all accounts and saved passwords (if any)."""
-    existing_accounts = cliaccount.get_all_accounts()
+    existing_accounts = cli_account.get_all_accounts()
     if existing_accounts:
         message = (
             "\nAre you sure you want to delete the following accounts?\n\t{}"
@@ -157,7 +155,7 @@ def delete_all():
         ).format("\n\t".join([c42account.name for c42account in existing_accounts]))
         if does_user_agree(message):
             for account_obj in existing_accounts:
-                cliaccount.delete_account(account_obj.name)
+                cli_account.delete_account(account_obj.name)
                 echo("account '{}' has been deleted.".format(account_obj.name))
     else:
         echo("\nNo accounts exist. Nothing to delete.")
@@ -170,10 +168,10 @@ def _prompt_for_allow_password_set(account_name):
 
 
 def _set_pw(account_name, password):
-    c42account = cliaccount.get_account(account_name)
+    c42account = cli_account.get_account(account_name)
     try:
-        validate_connection(c42account.authority_url, c42account.username, password)
+        validate_account(c42account)
     except Exception:
         secho("Password not stored!", bold=True)
         raise
-    cliaccount.set_password(password, c42account.name)
+    cli_account.set_password(password, c42account.name)

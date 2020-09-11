@@ -1,17 +1,7 @@
 import os
-import keyring
 from configparser import ConfigParser
 
-from in3cli import __PRODUCT_NAME__
 from in3cli.util import get_user_project_path
-
-
-def set_secret(address, secret):
-    keyring.set_password(__PRODUCT_NAME__, address, secret)
-
-
-def get_secret(address):
-    return keyring.get_password(__PRODUCT_NAME__, address)
 
 
 class NoConfigAccountError(Exception):

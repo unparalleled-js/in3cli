@@ -1,6 +1,5 @@
 from click import style
 
-import in3cli.password as password
 from in3cli.cmds.search.cursor_store import get_all_cursor_stores_for_account
 from in3cli.config import config_accessor
 from in3cli.config import ConfigAccessor
@@ -25,14 +24,14 @@ class In3Account:
         return self._account[ConfigAccessor.IGNORE_SSL_ERRORS_KEY]
 
     @property
-    def has_stored_password(self):
-        stored_password = password.get_stored_password(self)
+    def has_stored_private_key(self):
+        stored_password = config_accessor.get_stored_private_key(self)
         return stored_password is not None and stored_password != ""
 
-    def get_password(self):
-        pwd = password.get_stored_password(self)
+    def get_private_key(self):
+        pwd = password.get_stored_private_key(self)
         if not pwd:
-            pwd = password.get_password_from_prompt()
+            pwd = password.get_private_key_from_prompt()
         return pwd
 
     def __str__(self):
@@ -51,7 +50,7 @@ def get_account(account_name=None):
     try:
         return _get_account(account_name)
     except NoConfigaccountError as ex:
-        raise in3CLIError(str(ex), help=CREATE_ACCOUNT_HELP)
+        raise In3CliError(str(ex))
 
 
 def default_account_exists():
@@ -98,7 +97,7 @@ def create_account(name, server, username, ignore_ssl_errors):
 
 def delete_account(account_name):
     account = _get_account(account_name)
-    if password.get_stored_password(account) is not None:
+    if password.get_stored_private_key(account) is not None:
         password.delete_password(account)
     cursor_stores = get_all_cursor_stores_for_account(account_name)
     for store in cursor_stores:
@@ -117,17 +116,17 @@ def get_all_accounts():
 
 def get_stored_password(account_name=None):
     account = get_account(account_name)
-    return password.get_stored_password(account)
+    return password.get_stored_private_key(account)
 
 
 def set_password(new_password, account_name=None):
     account = get_account(account_name)
-    password.set_password(account, new_password)
+    password.set_private_key(account, new_password)
 
 
 CREATE_ACCOUNT_HELP = "\nTo add an account, use:\n{}".format(
     style(
-        "\tin3 account create --name <account-name> --server <authority-URL> --username <username>\n",
+        "\tin3 account create --name <account-name> --address <username>\n",
         bold=True,
     )
 )

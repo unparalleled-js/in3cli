@@ -11,11 +11,6 @@ import in3
 REGISTRY_CONTRACT_ADDRESS = "0x6C095A05764A23156eFD9D603eaDa144a9B1AF33"
 
 
-def get_in3_client(ignore_ssl_errors=False):
-    config = in3.ClientConfig(transport_ignore_tls=ignore_ssl_errors)
-    return in3.Client(in3_config=config)
-
-
 def wei_to_gwei(wei):
     return float(wei) / 1000000000
 
