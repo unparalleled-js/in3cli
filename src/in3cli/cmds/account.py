@@ -4,7 +4,7 @@ import click
 from click import echo
 from click import secho
 
-import in3cli.account as cli_account
+import in3cli.account as account_module
 from in3cli.client import validate_account
 from in3cli.error import In3CliError
 from in3cli.options import address_option
@@ -44,12 +44,12 @@ disable_ssl_option = click.option(
 @account_name_arg
 def show(account_name):
     """Print the details of an account."""
-    in3account = cli_account.get_account(account_name)
+    in3account = account_module.get_account(account_name)
     echo("{}:".format(in3account.name))
     echo("\tAddress: {}".format(in3account.address))
     echo("\tChain: {}".format(in3account.chain))
     echo("\tIgnore SSL Errors: {}".format(in3account.ignore_ssl_errors))
-    if cli_account.get_stored_private_key(in3account.name) is not None:
+    if account_module.get_stored_private_key(in3account.name) is not None:
         echo("\t* Private key is set.")
 
 
@@ -60,7 +60,7 @@ def show(account_name):
 @disable_ssl_option
 def create(name, address, private_key, disable_ssl_errors):
     """Create account settings. The first account created will be the default."""
-    cli_account.create_account(name, address, disable_ssl_errors)
+    account_module.create_account(name, address, disable_ssl_errors)
     if private_key:
         _set_private_key(name, private_key)
     else:
@@ -76,8 +76,8 @@ def create(name, address, private_key, disable_ssl_errors):
 @chain_option
 def update(name, address, private_key, chain, disable_ssl_errors):
     """Update an existing account."""
-    in3account = cli_account.get_account(name)
-    cli_account.update_account(
+    in3account = account_module.get_account(name)
+    account_module.update_account(
         name=in3account.name,
         address=address,
         chain=chain,
@@ -104,7 +104,7 @@ def reset_private_key(account_name):
 @account.command("list")
 def _list():
     """Show all existing stored accounts."""
-    accounts = cli_account.get_all_accounts()
+    accounts = account_module.get_all_accounts()
     if not accounts:
         raise In3CliError("No existing account.")
     for in3account in accounts:
@@ -115,7 +115,7 @@ def _list():
 @account_name_arg
 def use(account_name):
     """Set an account as the default."""
-    cli_account.switch_default_account(account_name)
+    account_module.switch_default_account(account_name)
     echo("{} has been set as the default account.".format(account_name))
 
 
@@ -125,12 +125,12 @@ def use(account_name):
 def delete(account_name):
     """Deletes an account and its stored password (if any)."""
     message = "\nDeleting this account will also delete any stored passwords and checkpoints. Are you sure? (y/n): "
-    if cli_account.is_default_account(account_name):
+    if account_module.is_default_account(account_name):
         message = "\n'{}' is currently the default account!\n{}".format(
             account_name, message
         )
     if does_user_agree(message):
-        cli_account.delete_account(account_name)
+        account_module.delete_account(account_name)
         echo("account '{}' has been deleted.".format(account_name))
 
 
@@ -138,7 +138,7 @@ def delete(account_name):
 @yes_option
 def delete_all():
     """Deletes all accounts and saved passwords (if any)."""
-    existing_accounts = cli_account.get_all_accounts()
+    existing_accounts = account_module.get_all_accounts()
     if existing_accounts:
         message = (
             "\nAre you sure you want to delete the following accounts?\n\t{}"
@@ -146,7 +146,7 @@ def delete_all():
         ).format("\n\t".join([in3account.name for in3account in existing_accounts]))
         if does_user_agree(message):
             for account_obj in existing_accounts:
-                cli_account.delete_account(account_obj.name)
+                account_module.delete_account(account_obj.name)
                 echo("account '{}' has been deleted.".format(account_obj.name))
     else:
         echo("\nNo accounts exist. Nothing to delete.")
@@ -159,10 +159,10 @@ def _prompt_for_allow_private_key_set(account_name):
 
 
 def _set_private_key(account_name, private_key):
-    in3account = cli_account.get_account(account_name)
+    in3account = account_module.get_account(account_name)
     try:
         validate_account(in3account)
     except Exception:
         secho("Password not stored!", bold=True)
         raise
-    cli_account.set_private_key(private_key, in3account.name)
+    account_module.set_private_key(private_key, in3account.name)

@@ -31,17 +31,20 @@ class In3Account:
 
     @property
     def has_stored_private_key(self):
-        stored_key = config_accessor.get_stored_private_key(self)
-        return stored_key is not None and stored_key != ""
+        key = self._get_stored_key()
+        return key is not None and key != ""
 
-    def get_private_key(self):
-        pwd = private_key.get_stored_private_key(self)
-        if not pwd:
-            pwd = private_key.get_private_key_from_prompt()
-        return pwd
+    def get_private_key(self, prompt=True):
+        key = self._get_stored_key()
+        if not key and prompt:
+            return private_key.get_private_key_from_prompt()
+        return key
+
+    def _get_stored_key(self):
+        return private_key.get_stored_private_key(self) or None
 
     def __str__(self):
-        return "{}: Address={}".format(self.name, self.address)
+        return "{}: Address={}, Chain={}.".format(self.name, self.address, self.chain)
 
 
 def _get_account(account_name=None):
