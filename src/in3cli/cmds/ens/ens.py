@@ -1,7 +1,6 @@
 import click
 from in3 import ClientException
 
-from in3cli.client import create_client
 from in3cli.cmds.ens.options import name_arg
 from in3cli.error import EnsNameFormatError, EnsNameNotFoundError
 from in3cli.options import client_options

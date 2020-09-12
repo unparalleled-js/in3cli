@@ -2,9 +2,9 @@ import click
 
 from in3cli.account import get_account
 from in3cli.client import create_client
+from in3cli.enums import Chain
 from in3cli.error import In3CliError
 from in3cli.model import FormatOptions
-
 
 yes_option = click.option(
     "-y",
@@ -27,7 +27,8 @@ format_option = click.option(
     help="Either JSON, CSV, or DEFAULT. DEFAULT just prints line separated values that exist.",
     default=FormatOptions.DEFAULT,
 )
-address_option = click.option("--address", "-a", help="An Ethereum address.")
+address_option = click.option("--address", "-a", help="A blockchain address.")
+chain_option = click.option("--chain", "-c", help="The blockchain to use.  Options: {}.".format(Chain))
 
 
 class CliState:

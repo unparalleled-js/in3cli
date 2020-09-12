@@ -8,6 +8,7 @@ import in3cli.account as cli_account
 from in3cli.client import validate_account
 from in3cli.error import In3CliError
 from in3cli.options import address_option
+from in3cli.options import chain_option
 from in3cli.options import yes_option
 from in3cli.private_key import get_private_key_from_prompt
 from in3cli.util import does_user_agree
@@ -46,6 +47,7 @@ def show(account_name):
     in3account = cli_account.get_account(account_name)
     echo("{}:".format(in3account.name))
     echo("\tAddress: {}".format(in3account.address))
+    echo("\tChain: {}".format(in3account.chain))
     echo("\tIgnore SSL Errors: {}".format(in3account.ignore_ssl_errors))
     if cli_account.get_stored_private_key(in3account.name) is not None:
         echo("\t* Private key is set.")
@@ -71,6 +73,7 @@ def create(name, address, private_key, disable_ssl_errors):
 @address_option
 @private_key_option
 @disable_ssl_option
+@chain_option
 def update(name, address, private_key, disable_ssl_errors):
     """Update an existing account."""
     in3account = cli_account.get_account(name)

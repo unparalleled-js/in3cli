@@ -21,6 +21,10 @@ class In3Account:
         return self._account[ConfigAccessor.ADDRESS_KEY]
 
     @property
+    def chain(self):
+        return self._account[ConfigAccessor.CHAIN_KEY]
+
+    @property
     def ignore_ssl_errors(self):
         stored_value = self._account[ConfigAccessor.IGNORE_SSL_ERRORS_KEY]
         return str_to_bool(stored_value)
@@ -74,8 +78,7 @@ def validate_default_account():
         existing_accounts = get_all_accounts()
         if not existing_accounts:
             raise In3CliError("No existing account.")
-        else:
-            raise In3CliError("No default account set.")
+        raise In3CliError("No default account set.")
 
 
 def account_exists(account_name=None):

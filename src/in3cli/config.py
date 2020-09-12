@@ -1,8 +1,8 @@
 import os
 from configparser import ConfigParser
 
-from in3cli.util import get_user_project_path
 from in3cli.enums import Chain
+from in3cli.util import get_user_project_path
 
 
 class NoConfigAccountError(Exception):

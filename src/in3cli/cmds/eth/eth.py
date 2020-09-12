@@ -7,10 +7,10 @@ import in3cli.model as model
 import in3cli.util as util
 from in3cli.error import In3CliArgumentError
 from in3cli.options import block_num_option
-from in3cli.options import format_option
-from in3cli.options import hash_option
-from in3cli.options import hash_arg
 from in3cli.options import client_options
+from in3cli.options import format_option
+from in3cli.options import hash_arg
+from in3cli.options import hash_option
 
 
 @click.command()
