@@ -53,8 +53,9 @@ def list_nodes(state, format):
     """Lists In3 node information."""
     _format = format.upper()
     node_list = state.client.refresh_node_list()
+    node_dicts = [model.create_node_dict(n) for n in node_list.nodes]
     formatter = OutputFormatter(_format)
-    formatter.echo_formatted_list(node_list)
+    formatter.echo_formatted_list(node_dicts)
 
 
 _CONTEXT_SETTINGS = {

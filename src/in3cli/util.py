@@ -146,6 +146,7 @@ def find_format_width(record, header, include_header=True):
         if not header:
             header = _get_default_header(record)
         rows.append(header)
+    # noinspection PyTypeChecker
     max_width_item = dict(header.items())  # Copy
     for record_row in record:
         row = OrderedDict()
