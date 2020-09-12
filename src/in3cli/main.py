@@ -7,6 +7,7 @@ from in3cli.cmds.account import account
 from in3cli.cmds.ens.ens import ens
 from in3cli.cmds.eth.eth import eth
 from in3cli.error import _ErrorHandlingGroup
+from in3cli.model import create_node_dict
 from in3cli.options import client_options
 from in3cli.options import format_option
 from in3cli.output_formats import OutputFormatter
@@ -51,9 +52,9 @@ def list_nodes(state, format):
     """Lists In3 node information."""
     _format = format.upper()
     node_list = state.client.refresh_node_list()
-    node_dicts = [model.create_node_dict(n) for n in node_list.nodes]
+    node_dicts = [create_node_dict(n) for n in node_list.nodes]
     formatter = OutputFormatter(_format)
-    formatter.echo_formatted_list(node_dicts)
+    formatter.echo(node_dicts)
 
 
 _CONTEXT_SETTINGS = {

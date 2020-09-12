@@ -1,6 +1,7 @@
 import csv
 import io
 import json
+from collections import OrderedDict
 
 import click
 
@@ -33,25 +34,28 @@ class OutputFormatter:
         elif output_format == OutputFormat.JSON:
             self._format_func = to_json
 
+    def echo(self, output_list):
+        formatted_output = self._get_formatted_output(output_list)
+        for output in formatted_output:
+            click.echo(output, nl=False)
+        if self.output_format in [OutputFormat.TABLE]:
+            click.echo()
+
+    def echo_via_pager(self, output):
+        click.echo_via_pager(self._get_formatted_output(output))
+
     def _format_output(self, output):
         return self._format_func(output)
 
     def _to_table(self, output):
         return to_table(output, self.header)
 
-    def get_formatted_output(self, output):
+    def _get_formatted_output(self, output):
         if self._requires_list_output:
             yield self._format_output(output)
         else:
             for item in output:
                 yield self._format_output(item)
-
-    def echo_formatted_list(self, output_list):
-        formatted_output = self.get_formatted_output(output_list)
-        for output in formatted_output:
-            click.echo(output, nl=False)
-        if self.output_format in [OutputFormat.TABLE]:
-            click.echo()
 
     @property
     def _requires_list_output(self):
@@ -59,12 +63,12 @@ class OutputFormatter:
 
 
 def to_csv(output):
-    """Output is a list of records"""
+    """Output is a list of dicts"""
 
     if not output:
         return
     string_io = io.StringIO()
-    fieldnames = list({k for d in output for k in d.keys()})
+    fieldnames = sorted(list({k for d in output for k in d.keys()}))
     writer = csv.DictWriter(string_io, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(output)
