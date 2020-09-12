@@ -3,8 +3,6 @@ import sys
 
 import click
 
-import in3cli.model as model
-from in3cli import util
 from in3cli.cmds.account import account
 from in3cli.cmds.ens.ens import ens
 from in3cli.cmds.eth.eth import eth

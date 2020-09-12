@@ -3,9 +3,9 @@ import datetime
 import io
 import json
 import os
+import shutil
 from collections import OrderedDict
 from os import path
-import shutil
 
 import click
 
