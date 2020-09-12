@@ -2,6 +2,7 @@ import os
 from configparser import ConfigParser
 
 from in3cli.util import get_user_project_path
+from in3cli.enums import Chain
 
 
 class NoConfigAccountError(Exception):
@@ -18,7 +19,8 @@ class ConfigAccessor:
     DEFAULT_VALUE = "__DEFAULT__"
     ADDRESS_KEY = "address"  # Wallet Address (Public)
     IGNORE_SSL_ERRORS_KEY = "ignore-ssl-errors"
-    DEFAULT_account = "default_account"
+    CHAIN_KEY = "chain"
+    DEFAULT_ACCOUNT = "default_account"
     _INTERNAL_SECTION = "Internal"
 
     def __init__(self, parser):
@@ -76,7 +78,7 @@ class ConfigAccessor:
         """Changes what is marked as the default account in the internal section."""
         if self.get_account(new_default_name) is None:
             raise NoConfigAccountError(new_default_name)
-        self._internal[self.DEFAULT_account] = new_default_name
+        self._internal[self.DEFAULT_ACCOUNT] = new_default_name
         self._save()
 
     def delete_account(self, name):
@@ -85,7 +87,7 @@ class ConfigAccessor:
             raise NoConfigAccountError(name)
         self.parser.remove_section(name)
         if name == self._default_account_name:
-            self._internal[self.DEFAULT_account] = self.DEFAULT_VALUE
+            self._internal[self.DEFAULT_ACCOUNT] = self.DEFAULT_VALUE
         self._save()
 
     def _set_address(self, new_value, account):
@@ -106,7 +108,7 @@ class ConfigAccessor:
 
     @property
     def _default_account_name(self):
-        return self._internal[self.DEFAULT_account]
+        return self._internal[self.DEFAULT_ACCOUNT]
 
     def _get_account_names(self):
         names = list(self._get_sections())
@@ -116,13 +118,16 @@ class ConfigAccessor:
     def _create_internal_section(self):
         self.parser.add_section(self._INTERNAL_SECTION)
         self.parser[self._INTERNAL_SECTION] = {}
-        self.parser[self._INTERNAL_SECTION][self.DEFAULT_account] = self.DEFAULT_VALUE
+        self.parser[self._INTERNAL_SECTION][self.DEFAULT_ACCOUNT] = self.DEFAULT_VALUE
 
     def _create_account_section(self, name):
+        account = {
+            self.ADDRESS_KEY: self.DEFAULT_VALUE,
+            self.IGNORE_SSL_ERRORS_KEY: str(False),
+            self.CHAIN_KEY: Chain.MAINNET,
+        }
         self.parser.add_section(name)
-        self.parser[name] = {}
-        self.parser[name][self.ADDRESS_KEY] = self.DEFAULT_VALUE
-        self.parser[name][self.IGNORE_SSL_ERRORS_KEY] = str(False)
+        self.parser[name] = account
 
     def _save(self):
         with open(self.path, "w+", encoding="utf-8") as file:
@@ -133,8 +138,8 @@ class ConfigAccessor:
         if not address or address == self.DEFAULT_VALUE:
             return
         self._save()
-        default_account = self._internal.get(self.DEFAULT_account)
-        if default_account is None or default_account == self.DEFAULT_VALUE:
+        default_account = self._internal.get(self.DEFAULT_ACCOUNT)
+        if not default_account or default_account == self.DEFAULT_VALUE:
             self.switch_default_account(account.name)
 
 

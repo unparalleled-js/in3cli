@@ -5,7 +5,6 @@ import click
 
 import in3cli.model as model
 from in3cli import util
-from in3cli.client import create_client
 from in3cli.cmds.account import account
 from in3cli.cmds.ens.ens import ens
 from in3cli.cmds.eth.eth import eth
@@ -48,11 +47,11 @@ signal.signal(signal.SIGINT, exit_on_interrupt)
 
 @click.command()
 @format_option
-def list_nodes(format):
+@client_options()
+def list_nodes(state, format):
     """List Incubed node information."""
     format = format.upper()
-    client = create_client()
-    node_list = client.refresh_node_list()
+    node_list = state.client.refresh_node_list()
     format_func = _get_format_func(format)
 
     def gen():

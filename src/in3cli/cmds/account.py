@@ -31,7 +31,6 @@ private_key_option = click.option(
     help="The private key for the wallet to use. It is not recommended to use this option. "
          "If this option is omitted, interactive prompts will be used to obtain the private key.",
 )
-
 disable_ssl_option = click.option(
     "--disable-ssl-errors",
     is_flag=True,
