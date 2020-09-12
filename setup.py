@@ -2,6 +2,18 @@
 
 from setuptools import setup
 from setuptools import find_packages
+from distutils.spawn import find_executable
+
+
+def get_exec_name():
+    """Handles the case for when the user already has the official in3 CLI installed.
+    Will then install as in3cli.
+    """
+    # TODO: Detect that it is the official in3 somehow
+    if find_executable("in3"):
+        return "in3cli"
+    return "in3"
+
 
 setup(
     name="in3cli",
@@ -33,5 +45,5 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
-    entry_points={"console_scripts": ["in3=in3cli.main:cli"]},
+    entry_points={"console_scripts": ["{}=in3cli.main:cli".format(get_exec_name())]},
 )
