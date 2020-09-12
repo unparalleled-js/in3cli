@@ -22,6 +22,7 @@ class In3CliArgumentError(In3CliError):
         self.message = err_text
 
 
+# TODO: Get rid of these and use ones from in3-c
 class EnsNameFormatError(In3CliError):
     def __init__(self, name):
         msg = "Missing top-level domain. Try '{}.eth'.".format(name)
@@ -32,6 +33,17 @@ class EnsNameNotFoundError(In3CliError):
     def __init__(self, name):
         msg = "ENS name '{}' not found.".format(name)
         super().__init__(msg)
+
+
+class SSLVerificationError(In3CliError):
+    def __init__(self):
+        super().__init__("SSL Verification Failure. "
+                         "Try creating an in3cli account and setting --disable-ssl-errors, like this: "
+                         "in3 account create --disable-ssl-errors")
+
+
+def _print_error(err):
+    click.echo("Error: {}".format(str(err)), err=True)
 
 
 class _ErrorHandlingGroup(click.Group):
@@ -49,8 +61,15 @@ class _ErrorHandlingGroup(click.Group):
             return super().invoke(ctx)
         except click.UsageError as err:
             self._suggest_cmd(err)
-        except (In3CliError, IN3BaseException) as err:
-            click.echo("Error: {}".format(str(err)), err=True)
+        except IN3BaseException as err:
+            if "CERTIFICATE_VERIFY_FAILED" in str(err):
+                _print_error("SSL Verification Failure. "
+                             "Try trusting the certificate or create an in3cli account using:\n"
+                             "\tin3 account create --disable-ssl-errors")
+            else:
+                _print_error(err)
+        except In3CliError as err:
+            _print_error(err)
         except click.ClickException:
             raise
         except click.exceptions.Exit:

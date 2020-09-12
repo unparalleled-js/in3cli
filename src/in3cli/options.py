@@ -56,7 +56,7 @@ class CliState:
     @property
     def client(self):
         if self._client is None:
-            self._client = create_client(self.account)
+            self._client = create_client(self._account)
         return self._client
 
     def set_assume_yes(self, param):
