@@ -4,7 +4,7 @@ from in3cli.account import get_account
 from in3cli.client import create_client
 from in3cli.enums import Chain
 from in3cli.error import In3CliError
-from in3cli.model import FormatOptions
+from in3cli.output_formats import OutputFormat
 
 yes_option = click.option(
     "-y",
@@ -20,16 +20,16 @@ block_num_option = click.option("--block-num", "-b", help="A block number.")
 format_option = click.option(
     "--format",
     "-f",
-    type=click.Choice(FormatOptions.choices(), case_sensitive=False),
+    type=click.Choice(OutputFormat.choices(), case_sensitive=False),
     help="The format which to display the output.",
-    default=FormatOptions.DEFAULT,
+    default=OutputFormat.TABLE,
 )
 address_option = click.option("--address", "-a", help="A blockchain address.")
 chain_option = click.option(
     "--chain",
     "-c",
     type=click.Choice(Chain.options(), case_sensitive=False),
-    help="The blockchain to use.  Options: {}.".format(Chain)
+    help="The blockchain to use."
 )
 
 

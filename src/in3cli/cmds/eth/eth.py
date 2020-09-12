@@ -65,7 +65,7 @@ def show_tx(state, hash):
     client = state.client.eth
     transaction = client.transaction_by_hash(hash)
     trans_dict = model.create_tx_dict(transaction)
-    _output_obj(trans_dict, model.FormatOptions.DEFAULT)
+    _output_obj(trans_dict, model.FormatOptions.TABLE)
 
 
 def _handle_hash_and_block_num_incompat(hash, block_num):
@@ -87,7 +87,7 @@ def _get_block_by_num(client, block_num):
 
 
 def _output_obj(obj, format_choice):
-    if format_choice == model.FormatOptions.DEFAULT:
+    if format_choice == model.FormatOptions.TABLE:
         util.print_dict(obj)
     elif format_choice == model.FormatOptions.JSON:
         util.print_dict_as_json(obj)

@@ -40,13 +40,3 @@ def create_node_dict(node):
             util.convert_timestamp_to_date_str(node.registerTime)
         ),
     }
-
-
-class FormatOptions:
-    DEFAULT = "DEFAULT"
-    JSON = "JSON"
-    CSV = "CSV"
-
-    @staticmethod
-    def choices():
-        return util.get_attribute_keys_from_class(FormatOptions)

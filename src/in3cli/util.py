@@ -3,11 +3,13 @@ import datetime
 import io
 import json
 import os
+from collections import OrderedDict
 from os import path
+import shutil
 
 import click
 
-REGISTRY_CONTRACT_ADDRESS = "0x6C095A05764A23156eFD9D603eaDa144a9B1AF33"
+_PADDING_SIZE = 3
 
 
 def wei_to_gwei(wei):
@@ -123,3 +125,80 @@ def get_attribute_keys_from_class(cls):
         for attr in dir(cls)
         if not callable(cls().__getattribute__(attr)) and not attr.startswith(u"_")
     ]
+
+
+def find_format_width(record, header, include_header=True):
+    """Fetches needed keys/items to be displayed based on header keys.
+
+    Finds the largest string against each column so as to decide the padding size for the column.
+
+    Args:
+        record (dict): data to be formatted.
+        header (dict): key-value where keys should map to keys of record dict and
+          value is the corresponding column name to be displayed on the CLI.
+        include_header (bool): include header in output, defaults to True.
+
+    Returns:
+        tuple (list of dict, dict): i.e Filtered records, padding size of columns.
+    """
+    rows = []
+    if include_header:
+        if not header:
+            header = _get_default_header(record)
+        rows.append(header)
+    max_width_item = dict(header.items())  # Copy
+    for record_row in record:
+        row = OrderedDict()
+        for header_key in header.keys():
+            item = record_row.get(header_key)
+            row[header_key] = item
+            max_width_item[header_key] = max(
+                max_width_item[header_key], str(item), key=len
+            )
+        rows.append(row)
+    column_size = {key: len(value) for key, value in max_width_item.items()}
+    return rows, column_size
+
+
+def _get_default_header(header_items):
+    if not header_items:
+        return
+
+    # Creates dict where keys and values are the same for `find_format_width()`.
+    header = {}
+    for item in header_items:
+        keys = item.keys()
+        for key in keys:
+            if key not in header and isinstance(key, str):
+                header[key] = key
+    return header
+
+
+def format_to_table(rows, column_size):
+    """Formats given rows into a string of left justified table."""
+    lines = []
+    for row in rows:
+        line = ""
+        for key in row.keys():
+            line += str(row[key]).ljust(column_size[key] + _PADDING_SIZE)
+        lines.append(line)
+    return "\n".join(lines)
+
+
+def format_string_list_to_columns(string_list, max_width=None):
+    """Prints a list of strings in justified columns and fits them neatly into specified width."""
+    if not string_list:
+        return
+    if not max_width:
+        max_width, _ = shutil.get_terminal_size()
+    column_width = len(max(string_list, key=len)) + _PADDING_SIZE
+    num_columns = int(max_width / column_width) or 1
+    format_string = "{{:<{0}}}".format(column_width) * num_columns
+    batches = [
+        string_list[i : i + num_columns]
+        for i in range(0, len(string_list), num_columns)
+    ]
+    padding = ["" for _ in range(num_columns)]
+    for batch in batches:
+        click.echo(format_string.format(*batch + padding))
+    click.echo()
