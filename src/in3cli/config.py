@@ -66,10 +66,12 @@ class ConfigAccessor:
         self.update_account(account.name, address, ignore_ssl_errors)
         self._try_complete_setup(account)
 
-    def update_account(self, name, address=None, ignore_ssl_errors=None):
+    def update_account(self, name, address=None, chain=None, ignore_ssl_errors=None):
         account = self.get_account(name)
         if address:
             self._set_address(address, account)
+        if chain:
+            self._set_chain(chain, account)
         if ignore_ssl_errors is not None:
             self._set_ignore_ssl_errors(ignore_ssl_errors, account)
         self._save()
@@ -92,6 +94,9 @@ class ConfigAccessor:
 
     def _set_address(self, new_value, account):
         account[self.ADDRESS_KEY] = new_value.strip()
+
+    def _set_chain(self, new_value, account):
+        account[self.CHAIN_KEY] = new_value
 
     def _set_ignore_ssl_errors(self, new_value, account):
         account[self.IGNORE_SSL_ERRORS_KEY] = str(new_value)

@@ -46,3 +46,7 @@ class FormatOptions:
     DEFAULT = "DEFAULT"
     JSON = "JSON"
     CSV = "CSV"
+
+    @staticmethod
+    def choices():
+        return util.get_attribute_keys_from_class(FormatOptions)

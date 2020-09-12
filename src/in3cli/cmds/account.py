@@ -74,10 +74,15 @@ def create(name, address, private_key, disable_ssl_errors):
 @private_key_option
 @disable_ssl_option
 @chain_option
-def update(name, address, private_key, disable_ssl_errors):
+def update(name, address, private_key, chain, disable_ssl_errors):
     """Update an existing account."""
     in3account = cli_account.get_account(name)
-    cli_account.update_account(in3account.name, address, disable_ssl_errors)
+    cli_account.update_account(
+        name=in3account.name,
+        address=address,
+        chain=chain,
+        ignore_ssl_errors=disable_ssl_errors
+    )
     if private_key:
         _set_private_key(name, private_key)
     else:

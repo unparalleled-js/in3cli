@@ -20,15 +20,17 @@ block_num_option = click.option("--block-num", "-b", help="A block number.")
 format_option = click.option(
     "--format",
     "-f",
-    type=click.Choice(
-        [FormatOptions.DEFAULT, FormatOptions.JSON, FormatOptions.CSV],
-        case_sensitive=False,
-    ),
-    help="Either JSON, CSV, or DEFAULT. DEFAULT just prints line separated values that exist.",
+    type=click.Choice(FormatOptions.choices(), case_sensitive=False),
+    help="The format which to display the output.",
     default=FormatOptions.DEFAULT,
 )
 address_option = click.option("--address", "-a", help="A blockchain address.")
-chain_option = click.option("--chain", "-c", help="The blockchain to use.  Options: {}.".format(Chain))
+chain_option = click.option(
+    "--chain",
+    "-c",
+    type=click.Choice(Chain.options(), case_sensitive=False),
+    help="The blockchain to use.  Options: {}.".format(Chain)
+)
 
 
 class CliState:

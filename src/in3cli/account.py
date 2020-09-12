@@ -107,8 +107,8 @@ def delete_account(account_name):
     config_accessor.delete_account(account_name)
 
 
-def update_account(name, address, ignore_ssl_errors):
-    config_accessor.update_account(name, address, ignore_ssl_errors)
+def update_account(name, address, chain, ignore_ssl_errors):
+    config_accessor.update_account(name, address, chain, ignore_ssl_errors)
 
 
 def get_all_accounts():
