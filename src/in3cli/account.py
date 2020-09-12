@@ -99,7 +99,7 @@ def switch_default_account(account_name):
 
 def create_account(name, address, ignore_ssl_errors):
     if account_exists(name):
-        raise In3CliError("an account named '{}' already exists.".format(name))
+        raise In3CliError("An account named '{}' already exists.".format(name))
     config_accessor.create_account(name, address, ignore_ssl_errors)
 
 
