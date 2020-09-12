@@ -103,3 +103,27 @@ Pick any transaction hash and use the `show-tx` command to get more information 
 ```bash
 in3 eth show-tx -h 0x8f98a2c9064f6b76ef8bfcf8747677715d382ba76c2c1f4890ac4a917097a937
 ```
+
+## Shell tab completion
+
+To enable shell autocomplete when you hit `tab` after the first few characters of a command name, do the following:
+
+For Bash, add this to ~/.bashrc:
+
+```
+eval "$(_IN3_COMPLETE=source_bash in3)"
+```
+
+For Zsh, add this to ~/.zshrc:
+
+```
+eval "$(_IN3_COMPLETE=source_zsh in3)"
+```
+
+For Fish, add this to ~/.config/fish/completions/code42.fish:
+
+```
+eval (env _IN3_COMPLETE=source_fish in3)
+```
+
+Open a new shell to enable completion. Or run the eval command directly in your current shell to enable it temporarily.
