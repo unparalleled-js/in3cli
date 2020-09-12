@@ -49,14 +49,14 @@ signal.signal(signal.SIGINT, exit_on_interrupt)
 @format_option
 @client_options()
 def list_nodes(state, format):
-    """List Incubed node information."""
-    format = format.upper()
+    """Lists In3 node information."""
+    _format = format.upper()
     node_list = state.client.refresh_node_list()
-    format_func = _get_format_func(format)
+    format_func = _get_format_func(_format)
 
     def gen():
         """Yields full CSV text, else individual formatted nodes."""
-        if format == model.FormatOptions.CSV:
+        if _format == model.FormatOptions.CSV:
             nodes = [model.create_node_dict(n) for n in node_list.nodes]
             yield util.convert_list_to_csv(nodes)
         else:
@@ -64,7 +64,6 @@ def list_nodes(state, format):
                 node_dict = model.create_node_dict(node)
                 output = format_func(node_dict)
                 yield "{}\n".format(output)
-
     click.echo_via_pager(gen)
 
 
