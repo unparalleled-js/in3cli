@@ -18,7 +18,11 @@ _PADDING_SIZE = 3
 
 
 def wei_to_gwei(wei):
-    return float(wei) / 1000000000
+    return wei / 1000000000
+
+
+def wei_to_eth(wei):
+    return wei / 1000000000000000000
 
 
 def print_dict(d):

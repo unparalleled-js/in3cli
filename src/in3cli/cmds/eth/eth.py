@@ -49,18 +49,19 @@ def show_block(state, hash, block_num, format):
 @block_num_option
 @client_options()
 @format_option
+@chain_option()
 def list_txs(state, hash, block_num, format):
     """Prints the transactions for the given block.
     If the block is not specified, uses the latest block number."""
     client = state.client.eth
     _handle_hash_and_block_num_incompat(hash, block_num)
     if hash is not None:
-        block = client.block_by_hash(hash)
+        block = client.block_by_hash(hash, get_full_block=True)
     else:
         block_num = _handle_block_num_param(block_num, client)
         block = _get_block_by_num(client, block_num)
     formatter = OutputFormatter(format)
-    txs = [{"Transaction Hash": tx} for tx in block.transactions]
+    txs = [model.create_tx_dict(tx) for tx in block.transactions]
     formatter.echo(txs)
 
 
@@ -68,6 +69,7 @@ def list_txs(state, hash, block_num, format):
 @hash_arg
 @client_options()
 @format_option
+@chain_option()
 def show_tx(state, hash, format):
     """Prints the transaction for the given hash."""
     client = state.client.eth
@@ -98,7 +100,7 @@ def _handle_hash_and_block_num_incompat(hash, block_num):
 
 def _get_block_by_num(client, block_num):
     """Fixes issue where block is not available from initial call."""
-    return run_with_timeout(lambda: client.block_by_number(block_num))
+    return run_with_timeout(lambda: client.block_by_number(block_num, get_full_block=True))
 
 
 @click.group()

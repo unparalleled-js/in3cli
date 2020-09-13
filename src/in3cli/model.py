@@ -34,7 +34,7 @@ def create_tx_dict(tx):
     return _ordered_dict({
         "Block Hash": tx.blockHash,
         "From": tx.From,
-        "Transaction Index": tx.transactionIndex,
+        "Amount": "{} Eth".format(util.wei_to_eth(tx.value)),
         "To": tx.to,
     })
 
