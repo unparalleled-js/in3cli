@@ -25,12 +25,6 @@ format_option = click.option(
     default=OutputFormat.TABLE,
 )
 address_option = click.option("--address", "-a", help="A blockchain address.")
-chain_option = click.option(
-    "--chain",
-    "-c",
-    type=click.Choice(Chain.options(), case_sensitive=False),
-    help="The blockchain to use."
-)
 
 
 class CliState:
@@ -42,9 +36,20 @@ class CliState:
         self._client = None
         self.search_filters = []
         self.assume_yes = False
+        self._chain = Chain.MAINNET
 
     def __call__(self, *args, **kwargs):
         return self.client
+
+    @property
+    def chain(self):
+        return self._chain
+
+    @chain.setter
+    def chain(self, value):
+        if value and isinstance(value, str):
+            self._chain = value.lower()
+            self._client = None
 
     @property
     def account(self):
@@ -59,7 +64,7 @@ class CliState:
     @property
     def client(self):
         if self._client is None:
-            self._client = CliClient(self._account)
+            self._client = CliClient(self._account, self.chain)
         return self._client
 
     def set_assume_yes(self, param):
@@ -83,6 +88,22 @@ def account_option(hidden=False):
     )
 
 
+def chain_option(hidden=False):
+    def set_chain(ctx, chain):
+        if chain and ctx.obj:
+            ctx.obj.chain = chain
+
+    return click.option(
+        "--chain",
+        "-c",
+        expose_value=False,
+        type=click.Choice(Chain.options(), case_sensitive=False),
+        hidden=hidden,
+        callback=lambda ctx, param, value: set_chain(ctx, value),
+        help="The blockchain network to use."
+    )
+
+
 pass_state = click.make_pass_decorator(CliState, ensure=True)
 
 
@@ -95,7 +116,6 @@ def client_options(hidden=False):
 
 
 def incompatible_with(incompatible_opts):
-
     if isinstance(incompatible_opts, str):
         incompatible_opts = [incompatible_opts]
 

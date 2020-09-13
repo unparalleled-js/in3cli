@@ -10,6 +10,7 @@ from in3cli.error import _ErrorHandlingGroup
 from in3cli.model import create_node_dict
 from in3cli.options import client_options
 from in3cli.options import format_option
+from in3cli.options import chain_option
 from in3cli.output_formats import OutputFormatter
 
 _BANNER = """\b
@@ -48,6 +49,7 @@ signal.signal(signal.SIGINT, exit_on_interrupt)
 @click.command()
 @format_option
 @client_options()
+@chain_option()
 def list_nodes(state, format):
     """Lists In3 node information."""
     _format = format.upper()
