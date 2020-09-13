@@ -1,7 +1,7 @@
 import click
 
 from in3cli.account import get_account
-from in3cli.client import ClientWrapper
+from in3cli.client import CliClient
 from in3cli.enums import Chain
 from in3cli.error import In3CliError
 from in3cli.output_formats import OutputFormat
@@ -43,6 +43,9 @@ class CliState:
         self.search_filters = []
         self.assume_yes = False
 
+    def __call__(self, *args, **kwargs):
+        return self.client
+
     @property
     def account(self):
         if self._account is None:
@@ -56,7 +59,7 @@ class CliState:
     @property
     def client(self):
         if self._client is None:
-            self._client = ClientWrapper(self._account)
+            self._client = CliClient(self._account)
         return self._client
 
     def set_assume_yes(self, param):

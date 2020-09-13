@@ -5,7 +5,7 @@ from click import echo
 from click import secho
 
 import in3cli.account as account_module
-from in3cli.client import ClientWrapper
+from in3cli.client import CliClient
 from in3cli.error import In3CliError
 from in3cli.options import address_option
 from in3cli.options import chain_option
@@ -65,7 +65,7 @@ def create(name, address, private_key, chain, disable_ssl_errors):
         name=name,
         address=address,
         chain=chain,
-        disable_ssl_errors=disable_ssl_errors,
+        ignore_ssl_errors=disable_ssl_errors,
     )
     if private_key:
         _set_private_key(name, private_key)
@@ -166,7 +166,7 @@ def _prompt_for_allow_private_key_set(account_name):
 def _set_private_key(account_name, private_key):
     in3account = account_module.get_account(account_name)
     try:
-        ClientWrapper(in3account).validate()
+        CliClient(in3account).validate()
     except Exception:
         secho("Private key not stored!", bold=True)
         raise

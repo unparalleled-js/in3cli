@@ -3,7 +3,7 @@ import in3
 from in3cli.enums import Chain
 
 
-class ClientWrapper:
+class CliClient(in3.Client):
     def __init__(self, account):
         self.account = account
         if account is None:
@@ -15,11 +15,7 @@ class ClientWrapper:
         config = in3.ClientConfig(
             transport_ignore_tls=ignore_ssl_errors
         )
-        self.client = in3.Client(chain=chain, in3_config=config)
-
-    @property
-    def eth(self):
-        return self.client.eth
+        super().__init__(chain=chain, in3_config=config)
 
     def validate(self):
-        return self.client is not None
+        return True
