@@ -1,12 +1,15 @@
 # in3cli:  The Incubed CLI
 
-An Incubed client at your terminal.
+An alternative Incubed client at your terminal.
 
 ## Installation
 
 ```bash
 python setup.py install
 ```
+
+If you have the official in3 bash CLI installed, this CLI will be installed as `in3alt`.
+Otherwise, it will be called `in3`.
 
 Test that it works by doing:
 

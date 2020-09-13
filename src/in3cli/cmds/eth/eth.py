@@ -6,6 +6,7 @@ import in3.exception as in3err
 import in3cli.model as model
 from in3cli.enums import BlockNum
 from in3cli.error import In3CliArgumentError
+from in3cli.error import In3CliChainTimeoutError
 from in3cli.options import block_num_option
 from in3cli.options import client_options
 from in3cli.options import format_option
@@ -101,11 +102,16 @@ def _get_block_by_num(client, block_num):
     """Fixes issue where block is not available from initial call."""
     # TODO: Add timeout
     block = None
+    tries = 0
+    max_tries = 5
     while block is None:
         try:
             block = client.block_by_number(block_num)
         except in3err.ClientException:
             time.sleep(1)
+            tries += 1
+            if tries == 5:
+                raise In3CliChainTimeoutError("block")
             continue
     return block
 

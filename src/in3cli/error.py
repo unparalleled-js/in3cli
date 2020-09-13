@@ -19,7 +19,13 @@ class In3CliArgumentError(In3CliError):
         err_text = "The following arguments cannot be used together: {}.".format(
             args_str
         )
-        self.message = err_text
+        super().__init__(err_text)
+
+
+class In3CliChainTimeoutError(In3CliError):
+    def __init__(self, waiting_for):
+        err_text = "Timed out waiting for {}. Please try again.".format(waiting_for)
+        super().__init__(err_text)
 
 
 # TODO: Get rid of these and use ones from in3-c

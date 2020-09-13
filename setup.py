@@ -7,11 +7,11 @@ from distutils.spawn import find_executable
 
 def get_exec_name():
     """Handles the case for when the user already has the official in3 CLI installed.
-    Will then install as in3cli.
+    Will then install as in3alt.
     """
     # TODO: Detect that it is the official in3 somehow
     if find_executable("in3"):
-        return "in3cli"
+        return "in3alt"
     return "in3"
 
 
