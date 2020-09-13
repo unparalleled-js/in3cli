@@ -5,7 +5,7 @@ from click import echo
 from click import secho
 
 import in3cli.account as account_module
-from in3cli.client import validate_account
+from in3cli.client import ClientWrapper
 from in3cli.error import In3CliError
 from in3cli.options import address_option
 from in3cli.options import chain_option
@@ -94,11 +94,10 @@ def update(name, address, private_key, chain, disable_ssl_errors):
 @account_name_arg
 def reset_private_key(account_name):
     """\b
-    Change the stored password for an account. Only affects what's stored in the local account,
-    does not make any changes to the in3 user account."""
-    password = getpass()
-    _set_private_key(account_name, password)
-    echo("Password updated for account '{}'".format(account_name))
+    Change the stored private key for an account."""
+    key = getpass()
+    _set_private_key(account_name, key)
+    echo("Private key updated for account '{}'".format(account_name))
 
 
 @account.command("list")
@@ -123,8 +122,8 @@ def use(account_name):
 @yes_option
 @account_name_arg
 def delete(account_name):
-    """Deletes an account and its stored password (if any)."""
-    message = "\nDeleting this account will also delete any stored passwords and checkpoints. Are you sure? (y/n): "
+    """Deletes an account and its stored private key (if any)."""
+    message = "\nDeleting this account will also delete any stored private keys. Are you sure? (y/n): "
     if account_module.is_default_account(account_name):
         message = "\n'{}' is currently the default account!\n{}".format(
             account_name, message
@@ -137,12 +136,12 @@ def delete(account_name):
 @account.command()
 @yes_option
 def delete_all():
-    """Deletes all accounts and saved passwords (if any)."""
+    """Deletes all accounts and saved private keys (if any)."""
     existing_accounts = account_module.get_all_accounts()
     if existing_accounts:
         message = (
             "\nAre you sure you want to delete the following accounts?\n\t{}"
-            "\n\nThis will also delete any stored passwords and checkpoints. (y/n): "
+            "\n\nThis will also delete any stored private keys. (y/n): "
         ).format("\n\t".join([in3account.name for in3account in existing_accounts]))
         if does_user_agree(message):
             for account_obj in existing_accounts:
@@ -161,8 +160,8 @@ def _prompt_for_allow_private_key_set(account_name):
 def _set_private_key(account_name, private_key):
     in3account = account_module.get_account(account_name)
     try:
-        validate_account(in3account)
+        ClientWrapper(in3account).validate()
     except Exception:
-        secho("Password not stored!", bold=True)
+        secho("Private key not stored!", bold=True)
         raise
     account_module.set_private_key(private_key, in3account.name)

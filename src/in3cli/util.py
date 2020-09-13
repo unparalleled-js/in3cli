@@ -4,10 +4,15 @@ import io
 import json
 import os
 import shutil
+import time
 from collections import OrderedDict
 from os import path
 
 import click
+import in3.exception as in3err
+from in3cli.error import In3CliChainTimeoutError
+
+
 
 _PADDING_SIZE = 3
 
@@ -195,3 +200,19 @@ def format_string_list_to_columns(string_list, max_width=None):
     for batch in batches:
         click.echo(format_string.format(*batch + padding))
     click.echo()
+
+
+def run_with_timeout(func):
+    res = None
+    tries = 0
+    max_tries = 5
+    while res is None:
+        try:
+            block = func()
+        except in3err.ClientException:
+            time.sleep(1)
+            tries += 1
+            if tries == max_tries:
+                raise In3CliChainTimeoutError("block")
+            continue
+    return res

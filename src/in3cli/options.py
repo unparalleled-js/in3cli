@@ -1,7 +1,7 @@
 import click
 
 from in3cli.account import get_account
-from in3cli.client import create_client
+from in3cli.client import ClientWrapper
 from in3cli.enums import Chain
 from in3cli.error import In3CliError
 from in3cli.output_formats import OutputFormat
@@ -56,7 +56,7 @@ class CliState:
     @property
     def client(self):
         if self._client is None:
-            self._client = create_client(self._account)
+            self._client = ClientWrapper(self._account)
         return self._client
 
     def set_assume_yes(self, param):

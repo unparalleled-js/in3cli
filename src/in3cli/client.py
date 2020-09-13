@@ -1,20 +1,25 @@
 import in3
+
 from in3cli.enums import Chain
 
 
-def create_client(cli_account):
-    if cli_account is None:
-        chain = Chain.MAINNET
-        ignore_ssl_errors = False
-    else:
-        chain = cli_account.chain
-        ignore_ssl_errors = cli_account.ignore_ssl_errors
-    config = in3.ClientConfig(
-        transport_ignore_tls=ignore_ssl_errors
-    )
-    return in3.Client(chain=chain, in3_config=config)
+class ClientWrapper:
+    def __init__(self, account):
+        self.account = account
+        if account is None:
+            chain = Chain.MAINNET
+            ignore_ssl_errors = False
+        else:
+            chain = account.chain
+            ignore_ssl_errors = account.ignore_ssl_errors
+        config = in3.ClientConfig(
+            transport_ignore_tls=ignore_ssl_errors
+        )
+        self.client = in3.Client(chain=chain, in3_config=config)
 
+    @property
+    def eth(self):
+        return self.client.eth
 
-def validate_account(account):
-    # TODO
-    return True
+    def validate(self):
+        return self.client is not None
