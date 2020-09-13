@@ -208,7 +208,7 @@ def run_with_timeout(func):
     max_tries = 5
     while res is None:
         try:
-            block = func()
+            res = func()
         except in3err.ClientException:
             time.sleep(1)
             tries += 1

@@ -8,6 +8,7 @@ from in3cli.options import client_options
 from in3cli.options import format_option
 from in3cli.options import hash_arg
 from in3cli.options import hash_option
+from in3cli.options import chain_option
 from in3cli.output_formats import OutputFormatter
 from in3cli.output_formats import OutputFormat
 from in3cli.util import run_with_timeout
@@ -26,6 +27,7 @@ def show_gas_price(state):
 @block_num_option
 @format_option
 @client_options()
+@chain_option()
 def show_block(state, hash, block_num, format):
     """Prints a block. If not given any args, will print the latest block."""
     client = state.client.eth
@@ -96,7 +98,7 @@ def _handle_hash_and_block_num_incompat(hash, block_num):
 
 def _get_block_by_num(client, block_num):
     """Fixes issue where block is not available from initial call."""
-    return run_with_timeout(lambda : client.block_by_number(block_num))
+    return run_with_timeout(lambda: client.block_by_number(block_num))
 
 
 @click.group()
