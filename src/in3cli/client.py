@@ -18,4 +18,5 @@ class CliClient(in3.Client):
         super().__init__(chain=chain, in3_config=config)
 
     def validate(self):
-        return True
+        # TODO: Validate address/key (if set)
+        return self.account is not None

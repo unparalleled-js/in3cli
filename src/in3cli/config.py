@@ -17,11 +17,15 @@ class NoConfigAccountError(Exception):
 
 class ConfigAccessor:
     DEFAULT_VALUE = "__DEFAULT__"
+
+    # Internal keys
+    _INTERNAL_SECTION = "Internal"
+    DEFAULT_ACCOUNT_KEY = "default_account"
+
+    # Keys
     ADDRESS_KEY = "address"  # Wallet Address (Public)
     IGNORE_SSL_ERRORS_KEY = "ignore-ssl-errors"
     CHAIN_KEY = "chain"
-    DEFAULT_ACCOUNT = "default_account"
-    _INTERNAL_SECTION = "Internal"
 
     def __init__(self, parser):
         self.parser = parser
@@ -33,12 +37,24 @@ class ConfigAccessor:
         else:
             self.parser.read(self.path)
 
+    @property
+    def _internal(self):
+        return self.parser[self._INTERNAL_SECTION]
+
+    @property
+    def default_account(self):
+        return self._internal[self.DEFAULT_ACCOUNT_KEY]
+
+    @default_account.setter
+    def default_account(self, value):
+        self._internal[self.DEFAULT_ACCOUNT_KEY] = value
+
     def get_account(self, name=None):
         """Returns the account with the given name.
         If name is None, returns the default account.
         If the name does not exist or there is no existing account, it will throw an exception.
         """
-        name = name or self._default_account_name
+        name = name or self.default_account
         if name not in self._get_sections() or name == self.DEFAULT_VALUE:
             name = name if name != self.DEFAULT_VALUE else None
             raise NoConfigAccountError(name)
@@ -85,7 +101,7 @@ class ConfigAccessor:
         """Changes what is marked as the default account in the internal section."""
         if self.get_account(new_default_name) is None:
             raise NoConfigAccountError(new_default_name)
-        self._internal[self.DEFAULT_ACCOUNT] = new_default_name
+        self.default_account = new_default_name
         self._save()
 
     def delete_account(self, name):
@@ -93,8 +109,8 @@ class ConfigAccessor:
         if self.get_account(name) is None:
             raise NoConfigAccountError(name)
         self.parser.remove_section(name)
-        if name == self._default_account_name:
-            self._internal[self.DEFAULT_ACCOUNT] = self.DEFAULT_VALUE
+        if name == self.default_account:
+            self._internal[self.DEFAULT_ACCOUNT_KEY] = self.DEFAULT_VALUE
         self._save()
 
     def _set_address(self, new_value, account):
@@ -112,14 +128,6 @@ class ConfigAccessor:
     def _get_account(self, name):
         return self.parser[name]
 
-    @property
-    def _internal(self):
-        return self.parser[self._INTERNAL_SECTION]
-
-    @property
-    def _default_account_name(self):
-        return self._internal[self.DEFAULT_ACCOUNT]
-
     def _get_account_names(self):
         names = list(self._get_sections())
         names.remove(self._INTERNAL_SECTION)
@@ -128,7 +136,7 @@ class ConfigAccessor:
     def _create_internal_section(self):
         self.parser.add_section(self._INTERNAL_SECTION)
         self.parser[self._INTERNAL_SECTION] = {}
-        self.parser[self._INTERNAL_SECTION][self.DEFAULT_ACCOUNT] = self.DEFAULT_VALUE
+        self.parser[self._INTERNAL_SECTION][self.DEFAULT_ACCOUNT_KEY] = self.DEFAULT_VALUE
 
     def _create_account_section(self, name):
         account = {
@@ -148,7 +156,7 @@ class ConfigAccessor:
         if not address or address == self.DEFAULT_VALUE:
             return
         self._save()
-        default_account = self._internal.get(self.DEFAULT_ACCOUNT)
+        default_account = self._internal.get(self.DEFAULT_ACCOUNT_KEY)
         if not default_account or default_account == self.DEFAULT_VALUE:
             self.switch_default_account(account.name)
 
