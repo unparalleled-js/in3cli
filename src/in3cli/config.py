@@ -52,7 +52,7 @@ class ConfigAccessor:
             accounts.append(self.get_account(name))
         return accounts
 
-    def create_account(self, name, address, ignore_ssl_errors):
+    def create_account(self, name, address, chain, ignore_ssl_errors):
         """Creates a new account if one does not already exist for that name."""
         try:
             self.get_account(name)
@@ -63,7 +63,12 @@ class ConfigAccessor:
                 raise ex
 
         account = self.get_account(name)
-        self.update_account(account.name, address, ignore_ssl_errors)
+        self.update_account(
+            name=account.name,
+            address=address,
+            chain=chain,
+            ignore_ssl_errors=ignore_ssl_errors
+        )
         self._try_complete_setup(account)
 
     def update_account(self, name, address=None, chain=None, ignore_ssl_errors=None):

@@ -97,10 +97,15 @@ def switch_default_account(account_name):
     config_accessor.switch_default_account(account.name)
 
 
-def create_account(name, address, ignore_ssl_errors):
+def create_account(name, address, chain, ignore_ssl_errors):
     if account_exists(name):
         raise In3CliError("An account named '{}' already exists.".format(name))
-    config_accessor.create_account(name, address, ignore_ssl_errors)
+    config_accessor.create_account(
+        name=name,
+        address=address,
+        chain=chain,
+        ignore_ssl_errors=ignore_ssl_errors,
+    )
 
 
 def delete_account(account_name):
@@ -111,7 +116,12 @@ def delete_account(account_name):
 
 
 def update_account(name, address, chain, ignore_ssl_errors):
-    config_accessor.update_account(name, address, chain, ignore_ssl_errors)
+    config_accessor.update_account(
+        name=name,
+        address=address,
+        chain=chain,
+        ignore_ssl_errors=ignore_ssl_errors,
+    )
 
 
 def get_all_accounts():

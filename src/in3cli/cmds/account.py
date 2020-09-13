@@ -57,10 +57,16 @@ def show(account_name):
 @name_option
 @address_option
 @private_key_option
+@chain_option
 @disable_ssl_option
-def create(name, address, private_key, disable_ssl_errors):
+def create(name, address, private_key, chain, disable_ssl_errors):
     """Create account settings. The first account created will be the default."""
-    account_module.create_account(name, address, disable_ssl_errors)
+    account_module.create_account(
+        name=name,
+        address=address,
+        chain=chain,
+        disable_ssl_errors=disable_ssl_errors,
+    )
     if private_key:
         _set_private_key(name, private_key)
     else:
@@ -72,8 +78,8 @@ def create(name, address, private_key, disable_ssl_errors):
 @name_option
 @address_option
 @private_key_option
-@disable_ssl_option
 @chain_option
+@disable_ssl_option
 def update(name, address, private_key, chain, disable_ssl_errors):
     """Update an existing account."""
     in3account = account_module.get_account(name)
