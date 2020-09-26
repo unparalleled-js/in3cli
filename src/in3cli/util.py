@@ -101,9 +101,8 @@ def get_user_project_path(*subdirs):
 
 def to_bool(val):
     def _error():
-        raise ValueError(
-            "{} not supported for to_bool() method.".format(type(val))
-        )
+        raise ValueError("{} not supported for to_bool() method.".format(type(val)))
+
     if isinstance(val, bool):
         return val
 

@@ -104,7 +104,6 @@ def create_mock_account(name="Test Account Name"):
 def account(mocker):
     mock = mocker.MagicMock(spec=In3Account)
     mock.name = "testcliaccount"
-    mocker
     return mock
 
 

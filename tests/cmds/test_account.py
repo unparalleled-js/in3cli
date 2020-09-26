@@ -49,7 +49,9 @@ def mock_account_module(mocker):
 
 @pytest.fixture(autouse=True)
 def mock_get_private_key_from_prompt(mocker):
-    mock = mocker.patch("{}.cmds.account.get_private_key_from_prompt".format(__PRODUCT_NAME__))
+    mock = mocker.patch(
+        "{}.cmds.account.get_private_key_from_prompt".format(__PRODUCT_NAME__)
+    )
     mock.return_value = TEST_KEY
     return mock
 
@@ -113,12 +115,12 @@ def test_create_account_if_user_does_not_set_private_key_still_creates(
             "-a",
             "0x123",
             "-c",
-            "goerli",
+            Chain.GOERLI,
             "--disable-ssl-errors",
         ],
     )
     mock_account_module.create_account.assert_called_once_with(
-        "foo", "0x123", "goerli", True
+        "foo", "0x123", Chain.GOERLI, True
     )
 
 
@@ -148,8 +150,7 @@ def test_create_account_if_credentials_invalid_does_not_set_private_key(
 ):
     mock_account_module.account_exists.return_value = False
     result = runner.invoke(
-        cli,
-        ["account", "create", "-n", "foo", "-a", "bar", "-c", Chain.MAINNET]
+        cli, ["account", "create", "-n", "foo", "-a", "bar", "-c", Chain.MAINNET]
     )
     assert "Private key not stored!" in result.output
     assert not mock_account_module.set_private_key.call_count
@@ -173,7 +174,7 @@ def test_create_account_with_private_key_option_if_credentials_invalid_does_not_
             "goerli",
             "--private-key",
             private_key,
-        ]
+        ],
     )
     assert "Private key not stored!" in result.output
     assert not mock_account_module.set_private_key.call_count
@@ -181,13 +182,16 @@ def test_create_account_with_private_key_option_if_credentials_invalid_does_not_
 
 
 def test_create_account_if_valid_private_key_saves(
-    runner, mocker, user_agreement, mock_account_module, valid_client, mock_get_private_key_from_prompt
+    runner,
+    mocker,
+    user_agreement,
+    mock_account_module,
+    valid_client,
+    mock_get_private_key_from_prompt,
 ):
     mock_account_module.account_exists.return_value = False
     runner.invoke(cli, ["account", "create", "-n", "foo", "-a", "0x123"])
-    mock_account_module.set_private_key.assert_called_once_with(
-        TEST_KEY, mocker.ANY
-    )
+    mock_account_module.set_private_key.assert_called_once_with(TEST_KEY, mocker.ANY)
 
 
 def test_create_account_with_private_key_option_if_valid_private_key_saves(
@@ -326,9 +330,7 @@ def test_update_account_if_user_agrees_and_valid_connection_sets_private_key(
             "--disable-ssl-errors",
         ],
     )
-    mock_account_module.set_private_key.assert_called_once_with(
-        TEST_KEY, mocker.ANY
-    )
+    mock_account_module.set_private_key.assert_called_once_with(TEST_KEY, mocker.ANY)
 
 
 def test_delete_account_warns_if_deleting_default(runner, mock_account_module):
@@ -344,9 +346,7 @@ def test_delete_account_does_nothing_if_user_doesnt_agree(
     assert mock_account_module.delete_account.call_count == 0
 
 
-def test_delete_account_outputs_success(
-    runner, mock_account_module, user_agreement
-):
+def test_delete_account_outputs_success(runner, mock_account_module, user_agreement):
     result = runner.invoke(cli, ["account", "delete", "mockdefault"])
     assert "Account 'mockdefault' has been deleted." in result.output
 
@@ -417,9 +417,7 @@ def test_list_accounts_when_no_accounts_outputs_no_accounts_message(
 
 def test_use_account(runner, mock_account_module, account):
     result = runner.invoke(cli, ["account", "use", account.name])
-    mock_account_module.switch_default_account.assert_called_once_with(
-        account.name
-    )
+    mock_account_module.switch_default_account.assert_called_once_with(account.name)
     assert (
         "{} has been set as the default account.".format(account.name) in result.output
     )

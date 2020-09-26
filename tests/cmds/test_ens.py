@@ -78,18 +78,20 @@ def test_resolve_prints_not_found_error_when_not_given_top_level_domain(
 def test_show_owner_returns_expected_address(mocker, runner, cli_state):
     cli_state.client.ens_owner = mocker.MagicMock()
     cli_state.client.ens_owner.return_value = TEST_ADDRESS
-    res = runner.invoke(cli, "ens show-owner {}".format(TEST_DOMAIN_NAME), obj=cli_state)
+    res = runner.invoke(
+        cli, "ens show-owner {}".format(TEST_DOMAIN_NAME), obj=cli_state
+    )
     assert TEST_ADDRESS in res.output
 
 
-def test_show_owner_prints_error_when_not_given_top_level_domain(
-    runner, cli_state
-):
+def test_show_owner_prints_error_when_not_given_top_level_domain(runner, cli_state):
     def side_effect(*args, **kwargs):
         raise EnsDomainFormatException()
 
     cli_state.client.ens_owner.side_effect = side_effect
-    res = runner.invoke(cli, "ens show-owner {}".format(TEST_DOMAIN_NAME), obj=cli_state)
+    res = runner.invoke(
+        cli, "ens show-owner {}".format(TEST_DOMAIN_NAME), obj=cli_state
+    )
     assert str(EnsNameFormatError(TEST_DOMAIN_NAME)) in res.output
 
 
@@ -101,5 +103,7 @@ def test_show_owner_prints_not_found_error_when_not_given_top_level_domain(
 
     cli_state.client.ens_owner = mocker.MagicMock()
     cli_state.client.ens_owner.side_effect = side_effect
-    res = runner.invoke(cli, "ens show-owner {}".format(TEST_DOMAIN_NAME), obj=cli_state)
+    res = runner.invoke(
+        cli, "ens show-owner {}".format(TEST_DOMAIN_NAME), obj=cli_state
+    )
     assert str(EnsNameNotFoundError(TEST_DOMAIN_NAME)) in res.output

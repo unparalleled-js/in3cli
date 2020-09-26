@@ -39,7 +39,11 @@ class ConfigAccessor:
 
     @property
     def _internal(self):
-        return self.parser[self._INTERNAL_SECTION]
+        try:
+            return self.parser[self._INTERNAL_SECTION]
+        except KeyError:
+            self._create_internal_section()
+            return self.parser[self._INTERNAL_SECTION]
 
     @property
     def default_account(self):
