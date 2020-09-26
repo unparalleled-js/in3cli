@@ -92,6 +92,12 @@ def setup_parser_one_account(account, internal, parser):
 
 
 class TestConfigAccessor:
+    def test_internal_creates_if_not_exists(self, mock_config_parser):
+        mock_config_parser.sections.return_value = []
+        accessor = ConfigAccessor(mock_config_parser)
+        internal_section = accessor._internal
+        assert mock_config_parser.sections.contains(internal_section)
+
     def test_get_account_when_account_does_not_exist_raises(self, mock_config_parser):
         mock_config_parser.sections.return_value = [_INTERNAL]
         accessor = ConfigAccessor(mock_config_parser)

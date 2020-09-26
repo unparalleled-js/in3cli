@@ -123,7 +123,7 @@ For Zsh, add this to ~/.zshrc:
 eval "$(_IN3_COMPLETE=source_zsh in3)"
 ```
 
-For Fish, add this to ~/.config/fish/completions/code42.fish:
+For Fish, add this to ~/.config/fish/completions/in3.fish:
 
 ```
 eval (env _IN3_COMPLETE=source_fish in3)
