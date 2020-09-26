@@ -1,15 +1,7 @@
-import pytest
 from in3 import NodeList
 from in3cli.main import cli
 
 import tests.conftest as tconf
-
-
-@pytest.fixture
-def mock_main_in3_client(mocker, in3_mock):
-    mock = mocker.patch("in3cli.main.create_client")
-    mock.return_value = in3_mock
-    return in3_mock
 
 
 def test_list_nodes_csv_output(mocker, runner, mock_main_in3_client):

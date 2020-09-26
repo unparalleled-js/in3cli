@@ -27,7 +27,7 @@ def show_gas_price(state):
 @block_num_option
 @format_option
 @client_options()
-@chain_option()
+@chain_option
 def show_block(state, hash, block_num, format):
     """Prints a block. If not given any args, will print the latest block."""
     client = state.client.eth
@@ -49,7 +49,7 @@ def show_block(state, hash, block_num, format):
 @block_num_option
 @client_options()
 @format_option
-@chain_option()
+@chain_option
 def list_txs(state, hash, block_num, format):
     """Prints the transactions for the given block.
     If the block is not specified, uses the latest block number."""
@@ -69,7 +69,7 @@ def list_txs(state, hash, block_num, format):
 @hash_arg
 @client_options()
 @format_option
-@chain_option()
+@chain_option
 def show_tx(state, hash, format):
     """Prints the transaction for the given hash."""
     client = state.client.eth
@@ -85,9 +85,11 @@ def _handle_block_num_param(param, client):
             return int(param)
         options = BlockNum.options()
         if param not in options:
-            raise ValueError("'{}' is not a supported block number. Try a numeric value or one of {}.".format(
-                param, options
-            ))
+            raise ValueError(
+                "'{}' is not a supported block number. Try a numeric value or one of {}.".format(
+                    param, options
+                )
+            )
     elif isinstance(param, int):
         return param
     return client.block_number()
@@ -100,7 +102,9 @@ def _handle_hash_and_block_num_incompat(hash, block_num):
 
 def _get_block_by_num(client, block_num):
     """Fixes issue where block is not available from initial call."""
-    return run_with_timeout(lambda: client.block_by_number(block_num, get_full_block=True))
+    return run_with_timeout(
+        lambda: client.block_by_number(block_num, get_full_block=True)
+    )
 
 
 @click.group()

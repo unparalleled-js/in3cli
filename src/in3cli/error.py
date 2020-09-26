@@ -43,9 +43,11 @@ class EnsNameNotFoundError(In3CliError):
 
 class SSLVerificationError(In3CliError):
     def __init__(self):
-        super().__init__("SSL Verification Failure. "
-                         "Try creating an in3cli account and setting --disable-ssl-errors, like this: "
-                         "in3 account create --disable-ssl-errors")
+        super().__init__(
+            "SSL Verification Failure. "
+            "Try creating an in3cli account and setting --disable-ssl-errors, like this: "
+            "in3 account create --disable-ssl-errors"
+        )
 
 
 def _print_error(err):
@@ -69,9 +71,11 @@ class _ErrorHandlingGroup(click.Group):
             self._suggest_cmd(err)
         except IN3BaseException as err:
             if "CERTIFICATE_VERIFY_FAILED" in str(err):
-                _print_error("SSL Verification Failure. "
-                             "Try trusting the certificate or create an in3cli account using:\n"
-                             "\tin3 account create --disable-ssl-errors")
+                _print_error(
+                    "SSL Verification Failure. "
+                    "Try trusting the certificate or create an in3cli account using:\n"
+                    "\tin3 account create --disable-ssl-errors"
+                )
             else:
                 _print_error(err)
         except In3CliError as err:

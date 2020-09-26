@@ -20,7 +20,7 @@ def get_hash(state, name):
 @click.command()
 @name_arg
 @client_options()
-@chain_option()
+@chain_option
 def resolve(state, name):
     """Resolve an ENS name to its address."""
     name = str(name)

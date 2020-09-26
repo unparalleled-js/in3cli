@@ -88,20 +88,20 @@ def account_option(hidden=False):
     )
 
 
-def chain_option(hidden=False):
-    def set_chain(ctx, chain):
-        if chain and ctx.obj:
-            ctx.obj.chain = chain
+def _set_chain(ctx, chain):
+    if chain and ctx.obj:
+        ctx.obj.chain = chain
 
-    return click.option(
-        "--chain",
-        "-c",
-        expose_value=False,
-        type=click.Choice(Chain.options(), case_sensitive=False),
-        hidden=hidden,
-        callback=lambda ctx, param, value: set_chain(ctx, value),
-        help="The blockchain network to use."
-    )
+
+chain_option = click.option(
+    "--chain",
+    "-c",
+    expose_value=False,
+    type=click.Choice(Chain.options(), case_sensitive=False),
+    hidden=False,
+    callback=lambda ctx, param, value: _set_chain(ctx, value),
+    help="The blockchain network to use.",
+)
 
 
 pass_state = click.make_pass_decorator(CliState, ensure=True)
@@ -112,6 +112,7 @@ def client_options(hidden=False):
         f = account_option(hidden)(f)
         f = pass_state(f)
         return f
+
     return decorator
 
 
@@ -142,4 +143,5 @@ def incompatible_with(incompatible_opts):
                         ),
                     )
             return super().handle_parse_result(ctx, opts, args)
+
     return IncompatibleOption

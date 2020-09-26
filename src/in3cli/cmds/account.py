@@ -6,9 +6,9 @@ from click import secho
 
 import in3cli.account as account_module
 from in3cli.client import CliClient
+from in3cli.enums import Chain
 from in3cli.error import In3CliError
 from in3cli.options import address_option
-from in3cli.options import chain_option
 from in3cli.options import yes_option
 from in3cli.private_key import get_private_key_from_prompt
 from in3cli.util import does_user_agree
@@ -18,6 +18,14 @@ from in3cli.util import does_user_agree
 def account():
     """For managing In3 wallet settings."""
     pass
+
+
+set_chain_option = click.option(
+    "--chain",
+    "-c",
+    type=click.Choice(Chain.options(), case_sensitive=False),
+    help="The blockchain network to use.",
+)
 
 
 account_name_arg = click.argument("account_name", required=False)
@@ -30,7 +38,7 @@ name_option = click.option(
 private_key_option = click.option(
     "--private-key",
     help="The private key for the wallet to use. It is not recommended to use this option. "
-         "If this option is omitted, interactive prompts will be used to obtain the private key.",
+    "If this option is omitted, interactive prompts will be used to obtain the private key.",
 )
 disable_ssl_option = click.option(
     "--disable-ssl-errors",
@@ -53,12 +61,12 @@ def show(account_name):
         echo("\t* Private key is set.")
 
 
-@account.command()
-@name_option
 @address_option
 @private_key_option
-@chain_option()
 @disable_ssl_option
+@account.command()
+@name_option
+@set_chain_option
 def create(name, address, private_key, chain, disable_ssl_errors):
     """Create account settings. The first account created will be the default."""
     account_module.create_account(
@@ -78,7 +86,7 @@ def create(name, address, private_key, chain, disable_ssl_errors):
 @name_option
 @address_option
 @private_key_option
-@chain_option()
+@set_chain_option
 @disable_ssl_option
 def update(name, address, private_key, chain, disable_ssl_errors):
     """Update an existing account."""
@@ -87,7 +95,7 @@ def update(name, address, private_key, chain, disable_ssl_errors):
         name=in3account.name,
         address=address,
         chain=chain,
-        ignore_ssl_errors=disable_ssl_errors
+        ignore_ssl_errors=disable_ssl_errors,
     )
     if private_key:
         _set_private_key(name, private_key)
@@ -158,7 +166,9 @@ def delete_all():
 
 
 def _prompt_for_allow_private_key_set(account_name):
-    if does_user_agree("Would you like to store or update your private key in keyring? (y/n): "):
+    if does_user_agree(
+        "Would you like to store or update your private key in keyring? (y/n): "
+    ):
         private_key = get_private_key_from_prompt()
         _set_private_key(account_name, private_key)
 

@@ -13,7 +13,6 @@ import in3.exception as in3err
 from in3cli.error import In3CliChainTimeoutError
 
 
-
 _PADDING_SIZE = 3
 
 
@@ -100,14 +99,22 @@ def get_user_project_path(*subdirs):
     return result_path
 
 
-def str_to_bool(val):
+def to_bool(val):
     def _error():
-        raise ValueError("val must be either 't', 'true', 'f', or 'false'. Not {}.".format(val))
+        raise ValueError(
+            "{} not supported for to_bool() method.".format(type(val))
+        )
+    if isinstance(val, bool):
+        return val
 
-    val = val.lower()
+    elif isinstance(val, int):
+        return val == 1
+
     if not isinstance(val, str):
         _error()
-    elif val in ["true", "t"]:
+
+    val = val.lower()
+    if val in ["true", "t"]:
         return True
     elif val in ["false", "f"]:
         return False
