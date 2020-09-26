@@ -57,7 +57,7 @@ def show(account_name):
 @name_option
 @address_option
 @private_key_option
-@chain_option
+@chain_option()
 @disable_ssl_option
 def create(name, address, private_key, chain, disable_ssl_errors):
     """Create account settings. The first account created will be the default."""
@@ -78,7 +78,7 @@ def create(name, address, private_key, chain, disable_ssl_errors):
 @name_option
 @address_option
 @private_key_option
-@chain_option
+@chain_option()
 @disable_ssl_option
 def update(name, address, private_key, chain, disable_ssl_errors):
     """Update an existing account."""
