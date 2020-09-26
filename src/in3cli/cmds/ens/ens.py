@@ -1,5 +1,6 @@
 import click
 from in3 import ClientException
+from in3.exception import EnsDomainFormatException
 
 from in3cli.cmds.ens.options import name_arg
 from in3cli.error import EnsNameFormatError, EnsNameNotFoundError
@@ -41,10 +42,8 @@ def show_owner(state, name):
 def _run_with_err_handling(name, func):
     try:
         return func()
-    except AssertionError as err:
-        if "must end with" in str(err):
-            raise EnsNameFormatError(name)
-        raise
+    except EnsDomainFormatException:
+        raise EnsNameFormatError(name)
     except ClientException as err:
         if "resolver not registered" in str(err):
             raise EnsNameNotFoundError(name)

@@ -34,29 +34,32 @@ def runner():
     return CliRunner()
 
 
+TEST_BLOCK = Block(
+    author="AUTHOR",
+    number=9,
+    hash="HASH",
+    parentHash="PARENT",
+    nonce=1,
+    sha3Uncles=["UNCLES"],
+    logsBloom="LOGS",
+    transactionsRoot="TRANS_ROOT",
+    stateRoot="state",
+    miner="miner",
+    difficulty=10,
+    totalDifficulty=100,
+    extraData="2020",
+    size=1000,
+    gasLimit=1000000000,
+    gasUsed=1000000000000,
+    timestamp=1234567889,
+    transactions=["TRANS"],
+    uncles=["UNCLES"],
+)
+
+
 @pytest.fixture
 def mock_block():
-    return Block(
-        author="AUTHOR",
-        number=9,
-        hash="HASH",
-        parentHash="PARENT",
-        nonce=1,
-        sha3Uncles=["UNCLES"],
-        logsBloom="LOGS",
-        transactionsRoot="TRANS_ROOT",
-        stateRoot="state",
-        miner="miner",
-        difficulty=10,
-        totalDifficulty=100,
-        extraData="2020",
-        size=1000,
-        gasLimit=1000000000,
-        gasUsed=1000000000000,
-        timestamp=1234567889,
-        transactions=["TRANS"],
-        uncles=["UNCLES"],
-    )
+    return TEST_BLOCK
 
 
 def create_test_node(url=None):

@@ -15,6 +15,6 @@ class CliClient(in3.Client):
         self.chain = chain or Chain.MAINNET
         super().__init__(chain=chain, in3_config=config)
 
-    def validate(self):
-        # TODO: Validate address/key (if set)
-        return self.account is not None
+
+def validate(client):
+    return CliClient(client).account is not None

@@ -12,6 +12,7 @@ from in3cli.options import address_option
 from in3cli.options import yes_option
 from in3cli.private_key import get_private_key_from_prompt
 from in3cli.util import does_user_agree
+from in3cli.client import validate
 
 
 @click.group()
@@ -70,10 +71,10 @@ def show(account_name):
 def create(name, address, private_key, chain, disable_ssl_errors):
     """Create account settings. The first account created will be the default."""
     account_module.create_account(
-        name=name,
-        address=address,
-        chain=chain,
-        ignore_ssl_errors=disable_ssl_errors,
+        name,
+        address,
+        chain,
+        disable_ssl_errors,
     )
     if private_key:
         _set_private_key(name, private_key)
@@ -92,26 +93,16 @@ def update(name, address, private_key, chain, disable_ssl_errors):
     """Update an existing account."""
     in3account = account_module.get_account(name)
     account_module.update_account(
-        name=in3account.name,
-        address=address,
-        chain=chain,
-        ignore_ssl_errors=disable_ssl_errors,
+        in3account.name,
+        address,
+        chain,
+        disable_ssl_errors,
     )
     if private_key:
         _set_private_key(name, private_key)
     else:
         _prompt_for_allow_private_key_set(in3account.name)
-    echo("account '{}' has been updated.".format(in3account.name))
-
-
-@account.command()
-@account_name_arg
-def reset_private_key(account_name):
-    """\b
-    Change the stored private key for an account."""
-    key = getpass()
-    _set_private_key(account_name, key)
-    echo("Private key updated for account '{}'".format(account_name))
+    echo("Account '{}' has been updated.".format(in3account.name))
 
 
 @account.command("list")
@@ -144,7 +135,7 @@ def delete(account_name):
         )
     if does_user_agree(message):
         account_module.delete_account(account_name)
-        echo("account '{}' has been deleted.".format(account_name))
+        echo("Account '{}' has been deleted.".format(account_name))
 
 
 @account.command()
@@ -160,24 +151,32 @@ def delete_all():
         if does_user_agree(message):
             for account_obj in existing_accounts:
                 account_module.delete_account(account_obj.name)
-                echo("account '{}' has been deleted.".format(account_obj.name))
+                echo("Account '{}' has been deleted.".format(account_obj.name))
     else:
         echo("\nNo accounts exist. Nothing to delete.")
 
 
 def _prompt_for_allow_private_key_set(account_name):
-    if does_user_agree(
+    user_ans = does_user_agree(
         "Would you like to store or update your private key in keyring? (y/n): "
-    ):
+    )
+    if user_ans:
         private_key = get_private_key_from_prompt()
         _set_private_key(account_name, private_key)
 
 
 def _set_private_key(account_name, private_key):
+    err_text = "Private key not stored!"
+
+    def _error(raised_err):
+        secho(err_text, bold=True)
+        raise raised_err
+
     in3account = account_module.get_account(account_name)
     try:
-        CliClient(in3account).validate()
-    except Exception:
-        secho("Private key not stored!", bold=True)
-        raise
+        is_valid = validate(in3account)
+        if not is_valid:
+            _error(Exception("Invalid client."))
+    except Exception as err:
+        _error(err)
     account_module.set_private_key(private_key, in3account.name)
