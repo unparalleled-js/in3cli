@@ -92,12 +92,12 @@ def test_create_account_if_user_sets_private_key_account_gets_created(
             "-a",
             "0x123",
             "-c",
-            "ipfs",
+            Chain.GOERLI,
             "--disable-ssl-errors",
         ],
     )
     mock_account_module.create_account.assert_called_once_with(
-        "foo", "0x123", "ipfs", True
+        "foo", "0x123", Chain.GOERLI, True
     )
 
 
@@ -253,12 +253,12 @@ def test_update_account_updates_existing_account(
             "-a",
             "0x124",
             "-c",
-            Chain.IPFS,
+            Chain.EWC,
             "--disable-ssl-errors",
         ],
     )
     mock_account_module.update_account.assert_called_once_with(
-        name, "0x124", Chain.IPFS, True
+        name, "0x124", Chain.EWC, True
     )
 
 
@@ -278,7 +278,7 @@ def test_update_account_if_user_does_not_agree_does_not_save_private_key(
             "-a",
             "0x124",
             "-c",
-            Chain.IPFS,
+            Chain.EWC,
             "--disable-ssl-errors",
         ],
     )
@@ -302,7 +302,7 @@ def test_update_account_if_invalid_private_key_does_not_save(
             "-a",
             "0x124",
             "-c",
-            Chain.IPFS,
+            Chain.EWC,
             "--disable-ssl-errors",
         ],
     )
@@ -326,7 +326,7 @@ def test_update_account_if_user_agrees_and_valid_connection_sets_private_key(
             "-a",
             "0x124",
             "-c",
-            Chain.IPFS,
+            Chain.EWC,
             "--disable-ssl-errors",
         ],
     )

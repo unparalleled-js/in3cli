@@ -4,9 +4,7 @@ from in3cli.util import get_attribute_keys_from_class
 class Chain:
     MAINNET = "mainnet"
     KOVAN = "kovan"
-    EVAN = "evan"
     GOERLI = "goerli"
-    IPFS = "ipfs"
     EWC = "ewc"
 
     @staticmethod

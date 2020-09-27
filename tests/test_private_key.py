@@ -49,14 +49,18 @@ def test_get_stored_private_key_when_given_account_name_gets_account_for_that_na
     account.address = "0x123456"
     private_key.get_stored_private_key(account)
     expected_service_name = "{}::{}".format(__PRODUCT_NAME__, account.name)
-    keyring_private_key_getter.assert_called_once_with(expected_service_name, account.address)
+    keyring_private_key_getter.assert_called_once_with(
+        expected_service_name, account.address
+    )
 
 
 def test_get_stored_private_key_returns_expected_private_key(
     account, keyring_private_key_getter, keyring_private_key_setter
 ):
     keyring_private_key_getter.return_value = "already stored private_key 123"
-    assert private_key.get_stored_private_key(account) == "already stored private_key 123"
+    assert (
+        private_key.get_stored_private_key(account) == "already stored private_key 123"
+    )
 
 
 def test_set_private_key_uses_expected_service_name_username_and_private_key(
