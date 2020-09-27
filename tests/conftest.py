@@ -117,3 +117,16 @@ def cli_state(mocker, in3_mock, account):
     mock_state.account = account
     mock_state.assume_yes = False
     return mock_state
+
+
+class TempSideEffect:
+    def __init__(self, setter, side_effect, reset=lambda *args, **kwargs: True):
+        self.setter = setter
+        self.side_effect = side_effect
+        self.reset = reset
+
+    def __enter__(self, *args, **kwargs):
+        self.setter.side_effect = self.side_effect
+
+    def __exit__(self, *args, **kwargs):
+        self.setter.side_effect = self.reset
