@@ -9,7 +9,7 @@ from in3cli.util import does_user_agree
 def get_stored_private_key(account):
     """Gets your currently stored private key for the given account."""
     service_name = _get_keyring_service_name(account.name)
-    return keyring.get_password(service_name, account.address)
+    return keyring.get_private_key(service_name, account.address)
 
 
 def get_private_key_from_prompt():
@@ -24,7 +24,7 @@ def set_private_key(account, new_key):
     if uses_file_storage and not _prompt_for_alternative_store():
         return
 
-    keyring.set_password(service_name, account.address, new_key)
+    keyring.set_private_key(service_name, account.address, new_key)
 
 
 def delete_private_key(account):

@@ -90,7 +90,10 @@ class MockSection:
         return self.values_dict.get(item)
 
 
-def create_mock_account(name="Test Account Name"):
+TEST_ACCOUNT_NAME = "Test Account Name"
+
+
+def create_mock_account(name=TEST_ACCOUNT_NAME):
     data = {
         ConfigAccessor.ADDRESS_KEY: TEST_ADDRESS,
         ConfigAccessor.IGNORE_SSL_ERRORS_KEY: True,

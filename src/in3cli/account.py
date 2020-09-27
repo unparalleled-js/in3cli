@@ -101,10 +101,10 @@ def create_account(name, address, chain, ignore_ssl_errors):
     if account_exists(name):
         raise In3CliError("An account named '{}' already exists.".format(name))
     config_accessor.create_account(
-        name=name,
-        address=address,
-        chain=chain,
-        ignore_ssl_errors=ignore_ssl_errors,
+        name,
+        address,
+        chain,
+        ignore_ssl_errors,
     )
 
 
