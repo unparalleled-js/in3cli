@@ -58,3 +58,9 @@ def create_node_dict(node):
             ),
         }
     )
+
+
+def create_resolved_ens_domain_name_dict(hashed_name, address, owner, resolver):
+    return _ordered_dict(
+        {"Hash": hashed_name, "Address": address, "Owner": owner, "Resolver": resolver}
+    )
