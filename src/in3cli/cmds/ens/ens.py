@@ -5,7 +5,6 @@ from in3.exception import EnsDomainFormatException
 from in3cli.cmds.ens.options import name_arg
 from in3cli.error import EnsNameFormatError, EnsNameNotFoundError
 from in3cli.options import client_options
-from in3cli.options import chain_option
 
 
 @click.command("hash")
@@ -21,7 +20,6 @@ def get_hash(state, name):
 @click.command()
 @name_arg
 @client_options()
-@chain_option
 def resolve(state, name):
     """Resolve an ENS name to its address."""
     name = str(name)

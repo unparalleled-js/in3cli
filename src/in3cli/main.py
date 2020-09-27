@@ -49,7 +49,6 @@ signal.signal(signal.SIGINT, exit_on_interrupt)
 @click.command()
 @format_option
 @client_options()
-@chain_option
 def list_nodes(state, format):
     """Lists In3 node information."""
     _format = format.upper()

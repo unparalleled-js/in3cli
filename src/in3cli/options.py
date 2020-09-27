@@ -110,6 +110,7 @@ pass_state = click.make_pass_decorator(CliState, ensure=True)
 def client_options(hidden=False):
     def decorator(f):
         f = account_option(hidden)(f)
+        f = chain_option(f)
         f = pass_state(f)
         return f
 
