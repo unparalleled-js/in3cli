@@ -50,12 +50,12 @@ def resolve(state, name, format):
     """Resolve an ENS name to its address, owner, hash, and resolver."""
     name = str(name)
     hashed_name = _run_with_err_handling(name, lambda: state.client.ens_namehash(name))
-    address = _run_with_err_handling(name, lambda: state.client.ens_address(name))
+    _address = _run_with_err_handling(name, lambda: state.client.ens_address(name))
     owner = _run_with_err_handling(name, lambda: state.client.ens_owner(name))
-    resolver = _run_with_err_handling(name, lambda: state.client.ens_resolver(name))
+    _resolver = _run_with_err_handling(name, lambda: state.client.ens_resolver(name))
     formatter = OutputFormatter(format)
     formatted_resolution = create_resolved_ens_domain_name_dict(
-        hashed_name, address, owner, resolver
+        hashed_name, _address, owner, _resolver
     )
     formatter.echo([formatted_resolution])
 

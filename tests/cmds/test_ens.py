@@ -1,5 +1,6 @@
 from in3 import ClientException
 from in3.exception import EnsDomainFormatException
+
 from in3cli.error import EnsNameFormatError
 from in3cli.error import EnsNameNotFoundError
 from in3cli.main import cli
@@ -42,14 +43,14 @@ def test_hash_prints_not_found_error_when_not_given_top_level_domain(
     assert str(EnsNameNotFoundError(TEST_DOMAIN_NAME)) in res.output
 
 
-def test_resolve_returns_expected_address(mocker, runner, cli_state):
+def test_address_returns_expected_address(mocker, runner, cli_state):
     cli_state.client.ens_address = mocker.MagicMock()
     cli_state.client.ens_address.return_value = TEST_ADDRESS
-    res = runner.invoke(cli, "ens resolve {}".format(TEST_DOMAIN_NAME), obj=cli_state)
+    res = runner.invoke(cli, "ens address {}".format(TEST_DOMAIN_NAME), obj=cli_state)
     assert TEST_ADDRESS in res.output
 
 
-def test_resolve_prints_error_when_not_given_top_level_domain(
+def test_address_prints_error_when_not_given_top_level_domain(
     mocker, runner, cli_state
 ):
     def side_effect(*args, **kwargs):
@@ -57,11 +58,11 @@ def test_resolve_prints_error_when_not_given_top_level_domain(
 
     cli_state.client.ens_address = mocker.MagicMock()
     cli_state.client.ens_address.side_effect = side_effect
-    res = runner.invoke(cli, "ens resolve {}".format(TEST_DOMAIN_NAME), obj=cli_state)
+    res = runner.invoke(cli, "ens address {}".format(TEST_DOMAIN_NAME), obj=cli_state)
     assert str(EnsNameFormatError(TEST_DOMAIN_NAME)) in res.output
 
 
-def test_resolve_prints_not_found_error_when_not_given_top_level_domain(
+def test_address_prints_not_found_error_when_not_given_top_level_domain(
     mocker, runner, cli_state
 ):
     err_text = "resolver not registered"
@@ -71,7 +72,7 @@ def test_resolve_prints_not_found_error_when_not_given_top_level_domain(
 
     cli_state.client.ens_address = mocker.MagicMock()
     cli_state.client.ens_address.side_effect = side_effect
-    res = runner.invoke(cli, "ens resolve {}".format(TEST_DOMAIN_NAME), obj=cli_state)
+    res = runner.invoke(cli, "ens address {}".format(TEST_DOMAIN_NAME), obj=cli_state)
     assert str(EnsNameNotFoundError(TEST_DOMAIN_NAME)) in res.output
 
 
@@ -106,4 +107,32 @@ def test_show_owner_prints_not_found_error_when_not_given_top_level_domain(
     res = runner.invoke(
         cli, "ens show-owner {}".format(TEST_DOMAIN_NAME), obj=cli_state
     )
+    assert str(EnsNameNotFoundError(TEST_DOMAIN_NAME)) in res.output
+
+
+def test_resolver_returns_expected_address(mocker, runner, cli_state):
+    cli_state.client.ens_resolver = mocker.MagicMock()
+    cli_state.client.ens_resolver.return_value = TEST_ADDRESS
+    res = runner.invoke(cli, "ens resolver {}".format(TEST_DOMAIN_NAME), obj=cli_state)
+    assert TEST_ADDRESS in res.output
+
+
+def test_resolver_prints_error_when_not_given_top_level_domain(runner, cli_state):
+    def side_effect(*args, **kwargs):
+        raise EnsDomainFormatException()
+
+    cli_state.client.ens_resolver.side_effect = side_effect
+    res = runner.invoke(cli, "ens resolver {}".format(TEST_DOMAIN_NAME), obj=cli_state)
+    assert str(EnsNameFormatError(TEST_DOMAIN_NAME)) in res.output
+
+
+def test_resolver_prints_not_found_error_when_not_given_top_level_domain(
+    mocker, runner, cli_state
+):
+    def side_effect(*args, **kwargs):
+        raise ClientException("resolver not registered")
+
+    cli_state.client.ens_resolver = mocker.MagicMock()
+    cli_state.client.ens_resolver.side_effect = side_effect
+    res = runner.invoke(cli, "ens resolver {}".format(TEST_DOMAIN_NAME), obj=cli_state)
     assert str(EnsNameNotFoundError(TEST_DOMAIN_NAME)) in res.output
