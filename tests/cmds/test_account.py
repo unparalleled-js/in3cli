@@ -147,7 +147,7 @@ def test_create_account_if_credentials_invalid_does_not_set_private_key(
     runner, user_agreement, mock_account_module, invalid_client
 ):
     mock_account_module.account_exists.return_value = False
-    result = runner.invoke(
+    runner.invoke(
         cli, ["account", "create", "-n", "foo", "-a", "bar", "-c", Chain.MAINNET]
     )
     assert not mock_account_module.set_private_key.call_count
