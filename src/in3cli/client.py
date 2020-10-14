@@ -1,7 +1,5 @@
 import in3
 
-from in3cli.enums import Chain
-
 
 class CliClient(in3.Client):
     def __init__(self, account, chain=None):
@@ -12,7 +10,7 @@ class CliClient(in3.Client):
             chain = chain or account.chain
             ignore_ssl_errors = account.ignore_ssl_errors
         config = in3.ClientConfig(transport_ignore_tls=ignore_ssl_errors)
-        self.chain = chain or Chain.MAINNET
+        self.chain = chain or account.chain
         super().__init__(chain=chain, in3_config=config)
 
     @property

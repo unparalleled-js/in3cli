@@ -1,15 +1,23 @@
 import click
+import in3.eth
 import in3cli.model as model
-from in3cli.enums import BlockNum
+from in3cli.enums import BlockNum, Chain
 from in3cli.error import In3CliArgumentError
 from in3cli.options import block_num_option
 from in3cli.options import client_options
 from in3cli.options import format_option
 from in3cli.options import hash_arg
 from in3cli.options import hash_option
+from in3cli.options import address_option
 from in3cli.output_formats import OutputFormat
 from in3cli.output_formats import OutputFormatter
 from in3cli.util import run_with_timeout
+from in3cli.util import eth_to_wei
+
+
+to_option = click.option("--to", "-t", help="An Ethereum address to send ether to.", required=True)
+value_option = click.option("--value", "-v", help="The value in ether to send.", required=True, type=float)
+gas_option = click.option("--gas", "-g", help="The value in wei to put for gas.", type=float)
 
 
 @click.command()
@@ -74,6 +82,34 @@ def show_tx(state, hash, format):
     formatter.echo([trans_dict])
 
 
+@click.command()
+@address_option
+@client_options()
+def show_balance(state, address=None):
+    """Shows the balance for the given address. If not given address, shows your account balance."""
+    client = state.client.eth
+    address = address or state.account.address
+    balance = client.account.balance(address)
+    click.echo(balance)
+
+
+@click.command()
+@to_option
+@value_option
+@gas_option
+@client_options()
+def send(state, to, value, gas=None):
+    etherscan_link_mask = "https://{}etherscan.io/tx/{}"
+    chain = state.client.chain
+    client = state.client.eth
+    sender = state.client.eth_account
+    value = int(eth_to_wei(value))
+    tx = in3.eth.NewTransaction(to=to, value=value, gasLimit=gas)
+    tx_hash = client.account.send_transaction(sender, tx)
+    chain_prefix = "{}.".format(chain.lower()) if chain != Chain.MAINNET else ""
+    click.echo(etherscan_link_mask.format(chain_prefix, tx_hash))
+
+
 def _handle_block_num_param(param, client):
     if isinstance(param, str):
         if param.isnumeric():
@@ -110,3 +146,5 @@ eth.add_command(show_gas_price)
 eth.add_command(show_block)
 eth.add_command(list_txs)
 eth.add_command(show_tx)
+eth.add_command(show_balance)
+eth.add_command(send)

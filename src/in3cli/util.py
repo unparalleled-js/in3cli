@@ -15,12 +15,20 @@ from in3cli.error import In3CliChainTimeoutError
 _PADDING_SIZE = 3
 
 
+WEI_PER_ETH = 10000000000000000000.0
+WEI_PER_GWEI = 1000000000.0
+
+
 def wei_to_gwei(wei):
-    return wei / 1000000000
+    return wei / WEI_PER_GWEI
 
 
 def wei_to_eth(wei):
-    return wei / 1000000000000000000
+    return wei / WEI_PER_ETH
+
+
+def eth_to_wei(eth):
+    return eth * WEI_PER_ETH
 
 
 def print_dict(d):

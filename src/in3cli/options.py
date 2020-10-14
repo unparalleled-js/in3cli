@@ -24,7 +24,7 @@ format_option = click.option(
     help="The format which to display the output.",
     default=OutputFormat.TABLE,
 )
-address_option = click.option("--address", "-a", help="A blockchain address.")
+address_option = click.option("--address", "-a", help="An Ethereum address.")
 
 
 class CliState:
@@ -36,7 +36,7 @@ class CliState:
         self._client = None
         self.search_filters = []
         self.assume_yes = False
-        self._chain = Chain.MAINNET
+        self._chain = self._account.chain
 
     def __call__(self, *args, **kwargs):
         return self.client
