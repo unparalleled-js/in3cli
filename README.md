@@ -1,4 +1,4 @@
-# in3cli:  An Incubed CLI client made with python
+# in3cli:  A python Incubed CLI client
 
 An alternative Incubed client at your terminal.
 
