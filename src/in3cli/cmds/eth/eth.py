@@ -100,12 +100,12 @@ def show_balance(state, address=None):
 @client_options()
 def send(state, to, value, gas=None):
     etherscan_link_mask = "https://{}etherscan.io/tx/{}"
-    chain = state.client.chain
-    client = state.client.eth
+    chain = state.chain
+    client = state.client.eth.account
     sender = state.client.eth_account
     value = int(eth_to_wei(value))
     tx = in3.eth.NewTransaction(to=to, value=value, gasLimit=gas)
-    tx_hash = client.account.send_transaction(sender, tx)
+    tx_hash = client.send_transaction(sender, tx)
     chain_prefix = "{}.".format(chain.lower()) if chain != Chain.MAINNET else ""
     click.echo(etherscan_link_mask.format(chain_prefix, tx_hash))
 
