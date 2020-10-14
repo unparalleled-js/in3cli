@@ -11,29 +11,6 @@ from in3cli.options import client_options
 from in3cli.options import format_option
 from in3cli.output_formats import OutputFormatter
 
-_BANNER = """\b
-            @K!m@
-          @K;   :S@@
-        @y,  's~  .7Q@
-      @y,  'uQ  E~  .z@
-    @b,  '}Q      h~  _w@
-  @o,  ~6     @    @%^  .zQ
- S,  `X     W< ~X    @m,  .JQ
- K;  `}Q  8=`    ~X  @x.  :w@
-  @QL` `|B@y~|Qy,  'nQ#|@@
-    @&;  `|B     y,  '6@@
-   @ky@&|`  ;q W7q@ !  'nQ@
- @U~  |@@&|`  ~`  f  d,  '}Q@
-@7   `Q    #?`  !d    Q~   ;Q@
- @W<` `iQ    QyQ     y`  ~U@
-   @8<  `vQ        a,  ~U@
-     @X~  `7Q    a,  'X@
-      @g=`  ^Di`  ~X@
-         @W>`    ~X@
-           @g= ~k@
-             @Q@
-"""
-
 
 # Handle KeyboardInterrupts by just exiting instead of printing out a stack
 def exit_on_interrupt(signal, frame):
@@ -62,7 +39,7 @@ _CONTEXT_SETTINGS = {
 }
 
 
-@click.group(cls=_ErrorHandlingGroup, context_settings=_CONTEXT_SETTINGS, help=_BANNER)
+@click.group(cls=_ErrorHandlingGroup, context_settings=_CONTEXT_SETTINGS)
 @client_options(hidden=True)
 def cli(state):
     pass

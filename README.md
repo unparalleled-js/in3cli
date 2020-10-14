@@ -22,34 +22,16 @@ You should see:
 ```
 Usage: in3 [OPTIONS] COMMAND [ARGS]...
 
-              @K!m@
-            @K;   :S@@
-          @y,  's~  .7Q@
-        @y,  'uQ  E~  .z@
-      @b,  '}Q      h~  _w@
-    @o,  ~6     @    @%^  .zQ
-   S,  `X     W< ~X    @m,  .JQ
-   K;  `}Q  8=`    ~X  @x.  :w@
-    @QL` `|B@y~\Qy,  'nQ#|@@
-      @&;  `|B     y,  '6@@
-     @ky@&|`  ;q W7q@ !  'nQ@
-   @U~  |@@&|`  ~`  f  d,  '}Q@
-  @7   `Q    #?`  !d    Q~   ;Q@
-   @W<` `iQ    QyQ     y`  ~U@
-     @8<  `vQ        a,  ~U@
-       @X~  `7Q    a,  'X@
-        @g=`  ^Di`  ~X@
-           @W>`    ~X@
-             @g= ~k@
-               @Q@
-
 Options:
-  --help  Show this message and exit.
+  -c, --chain [ewc|goerli|kovan|mainnet]
+                                  The blockchain network to use.
+  -h, --help                      Show this message and exit.
 
 Commands:
-  end
-  eth
-  list-nodes
+  account     For managing In3 wallet settings.
+  ens         Commands for resolving ENS domains.
+  eth         Commands for interacting with Ethereum.
+  list-nodes  Lists In3 node information.
 ```
 
 ## Help
