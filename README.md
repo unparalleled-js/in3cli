@@ -107,6 +107,12 @@ Pick any transaction hash and use the `show-tx` command to get more information 
 in3 eth show-tx -h 0x8f98a2c9064f6b76ef8bfcf8747677715d382ba76c2c1f4890ac4a917097a937
 ```
 
+Sending a transaction is just an easy, provided you have an account set up.
+
+```bash
+in3 eth send -t 0xAD01374213bde784752aDC51f3342Fc2AE030CC5 -v 0.000000001463926659
+```
+
 ## Shell tab completion
 
 To enable shell autocomplete when you hit `tab` after the first few characters of a command name, do the following:
