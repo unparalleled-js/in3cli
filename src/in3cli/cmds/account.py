@@ -1,11 +1,8 @@
-from getpass import getpass
-
 import click
 from click import echo
 from click import secho
 
 import in3cli.account as account_module
-from in3cli.client import CliClient
 from in3cli.enums import Chain
 from in3cli.error import In3CliError
 from in3cli.options import address_option
@@ -166,15 +163,17 @@ def _prompt_for_allow_private_key_set(account_name):
 
 
 def _set_private_key(account_name, private_key):
-    err_text = "Private key not stored!"
-
     def _error(raised_err):
-        secho(err_text, bold=True)
         raise raised_err
+
+    if len(private_key) == 64 and private_key[1] != "x":
+        private_key = "0x{}".format(private_key)
+    elif len(private_key) != 66:
+        _error(Exception("Invalid private key"))
 
     in3account = account_module.get_account(account_name)
     try:
-        is_valid = validate(in3account)
+        is_valid = validate(in3account, private_key)
         if not is_valid:
             _error(Exception("Invalid client."))
     except Exception as err:

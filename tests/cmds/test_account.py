@@ -3,11 +3,9 @@ import pytest
 from in3cli.enums import Chain
 from tests.conftest import create_mock_account
 from in3cli import __PRODUCT_NAME__
-from in3cli.error import In3CliError
 from in3cli.main import cli
 
-
-TEST_KEY = "newkey"
+TEST_PRIVATE_KEY = "0x0000d33f34444443d4bc66666a68de88888aaa0999995448e2795db8d31b4111"
 
 
 @pytest.fixture
@@ -52,7 +50,7 @@ def mock_get_private_key_from_prompt(mocker):
     mock = mocker.patch(
         "{}.cmds.account.get_private_key_from_prompt".format(__PRODUCT_NAME__)
     )
-    mock.return_value = TEST_KEY
+    mock.return_value = TEST_PRIVATE_KEY
     return mock
 
 
@@ -152,7 +150,6 @@ def test_create_account_if_credentials_invalid_does_not_set_private_key(
     result = runner.invoke(
         cli, ["account", "create", "-n", "foo", "-a", "bar", "-c", Chain.MAINNET]
     )
-    assert "Private key not stored!" in result.output
     assert not mock_account_module.set_private_key.call_count
 
 
@@ -176,7 +173,6 @@ def test_create_account_with_private_key_option_if_credentials_invalid_does_not_
             private_key,
         ],
     )
-    assert "Private key not stored!" in result.output
     assert not mock_account_module.set_private_key.call_count
     assert "Would you like to set a private key?" not in result.output
 
@@ -191,7 +187,7 @@ def test_create_account_if_valid_private_key_saves(
 ):
     mock_account_module.account_exists.return_value = False
     runner.invoke(cli, ["account", "create", "-n", "foo", "-a", "0x123"])
-    mock_account_module.set_private_key.assert_called_once_with(TEST_KEY, mocker.ANY)
+    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
 
 
 def test_create_account_with_private_key_option_if_valid_private_key_saves(
@@ -210,10 +206,34 @@ def test_create_account_with_private_key_option_if_valid_private_key_saves(
             "-c",
             "goerli",
             "--private-key",
-            TEST_KEY,
+            TEST_PRIVATE_KEY,
         ],
     )
-    mock_account_module.set_private_key.assert_called_once_with(TEST_KEY, mocker.ANY)
+    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
+    assert "Would you like to set a private key?" not in result.output
+
+
+def test_create_account_with_valid_private_key_missing_prefix_still_saves(
+    runner, mocker, valid_client, mock_account_module
+):
+    mock_account_module.account_exists.return_value = False
+    private_key = str(TEST_PRIVATE_KEY)[2:]
+    result = runner.invoke(
+        cli,
+        [
+            "account",
+            "create",
+            "-n",
+            "foo",
+            "-a",
+            "0x123",
+            "-c",
+            "goerli",
+            "--private-key",
+            private_key,
+        ],
+    )
+    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
     assert "Would you like to set a private key?" not in result.output
 
 
@@ -292,7 +312,7 @@ def test_update_account_if_invalid_private_key_does_not_save(
     account.name = name
     mock_account_module.get_account.return_value = account
 
-    result = runner.invoke(
+    runner.invoke(
         cli,
         [
             "account",
@@ -307,7 +327,6 @@ def test_update_account_if_invalid_private_key_does_not_save(
         ],
     )
     assert not mock_account_module.set_private_key.call_count
-    assert "Private key not stored!" in result.output
 
 
 def test_update_account_if_user_agrees_and_valid_connection_sets_private_key(
@@ -324,13 +343,41 @@ def test_update_account_if_user_agrees_and_valid_connection_sets_private_key(
             "-n",
             name,
             "-a",
-            "0x124",
+            "0x123",
             "-c",
             Chain.EWC,
             "--disable-ssl-errors",
         ],
     )
-    mock_account_module.set_private_key.assert_called_once_with(TEST_KEY, mocker.ANY)
+    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
+
+
+def test_update_account_if_missing_key_prefix_user_agrees_and_valid_connection_sets_private_key(
+    runner, mocker, user_agreement, valid_client, mock_account_module, account
+):
+    mock = mocker.patch(
+        "{}.cmds.account.get_private_key_from_prompt".format(__PRODUCT_NAME__)
+    )
+    key = str(TEST_PRIVATE_KEY)[2:]
+    mock.return_value = key
+    name = "foo"
+    account.name = name
+    mock_account_module.get_account.return_value = account
+    runner.invoke(
+        cli,
+        [
+            "account",
+            "update",
+            "-n",
+            name,
+            "-a",
+            "0x123",
+            "-c",
+            Chain.EWC,
+            "--disable-ssl-errors",
+        ],
+    )
+    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
 
 
 def test_delete_account_warns_if_deleting_default(runner, mock_account_module):

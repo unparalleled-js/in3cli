@@ -86,6 +86,8 @@ class _ErrorHandlingGroup(click.Group):
             raise
         except OSError:
             raise
+        except Exception as ex:
+            click.echo(str(ex))
 
     @staticmethod
     def _suggest_cmd(usage_err):

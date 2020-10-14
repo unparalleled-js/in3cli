@@ -1,4 +1,5 @@
 import in3
+import click
 
 from in3cli.enums import Chain
 
@@ -15,6 +16,19 @@ class CliClient(in3.Client):
         self.chain = chain or Chain.MAINNET
         super().__init__(chain=chain, in3_config=config)
 
+    @property
+    def eth_account(self):
+        pkey = self.account.get_private_key()
+        recovered_account = self.recover_eth_account(pkey)
+        return recovered_account
 
-def validate(client):
-    return CliClient(client).account is not None
+    def recover_eth_account(self, private_key):
+        return self.eth.account.recover(private_key)
+
+
+def validate(client, private_key):
+    client = CliClient(client)
+    if client.account is None:
+        raise Exception("Missing account.")
+    validation_result = client.recover_eth_account(private_key)
+    return validation_result is not None
