@@ -1,10 +1,8 @@
 import csv
 import io
 import json
-from collections import OrderedDict
 
 import click
-
 from in3cli.util import find_format_width
 from in3cli.util import format_to_table
 from in3cli.util import get_attribute_keys_from_class

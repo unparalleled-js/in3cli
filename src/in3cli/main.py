@@ -2,7 +2,6 @@ import signal
 import sys
 
 import click
-
 from in3cli.cmds.account import account
 from in3cli.cmds.ens.ens import ens
 from in3cli.cmds.eth.eth import eth
@@ -10,7 +9,6 @@ from in3cli.error import _ErrorHandlingGroup
 from in3cli.model import create_node_dict
 from in3cli.options import client_options
 from in3cli.options import format_option
-from in3cli.options import chain_option
 from in3cli.output_formats import OutputFormatter
 
 _BANNER = """\b

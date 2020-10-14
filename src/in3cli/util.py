@@ -12,7 +12,6 @@ import click
 import in3.exception as in3err
 from in3cli.error import In3CliChainTimeoutError
 
-
 _PADDING_SIZE = 3
 
 

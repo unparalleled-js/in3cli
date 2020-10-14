@@ -1,15 +1,13 @@
 import click
 from in3 import ClientException
 from in3.exception import EnsDomainFormatException
-
-from in3cli.model import create_resolved_ens_domain_name_dict
 from in3cli.cmds.ens.options import name_arg
 from in3cli.error import EnsNameFormatError
 from in3cli.error import EnsNameNotFoundError
+from in3cli.model import create_resolved_ens_domain_name_dict
 from in3cli.options import client_options
 from in3cli.options import format_option
 from in3cli.output_formats import OutputFormatter
-from in3cli.output_formats import OutputFormat
 
 
 @click.command("hash")

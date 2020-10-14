@@ -1,7 +1,6 @@
 from getpass import getpass
 
 import keyring
-
 from in3cli import __PRODUCT_NAME__
 from in3cli.util import does_user_agree
 

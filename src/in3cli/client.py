@@ -1,5 +1,4 @@
 import in3
-import click
 
 from in3cli.enums import Chain
 

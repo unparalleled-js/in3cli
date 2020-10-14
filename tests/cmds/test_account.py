@@ -187,7 +187,9 @@ def test_create_account_if_valid_private_key_saves(
 ):
     mock_account_module.account_exists.return_value = False
     runner.invoke(cli, ["account", "create", "-n", "foo", "-a", "0x123"])
-    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
+    mock_account_module.set_private_key.assert_called_once_with(
+        TEST_PRIVATE_KEY, mocker.ANY
+    )
 
 
 def test_create_account_with_private_key_option_if_valid_private_key_saves(
@@ -209,7 +211,9 @@ def test_create_account_with_private_key_option_if_valid_private_key_saves(
             TEST_PRIVATE_KEY,
         ],
     )
-    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
+    mock_account_module.set_private_key.assert_called_once_with(
+        TEST_PRIVATE_KEY, mocker.ANY
+    )
     assert "Would you like to set a private key?" not in result.output
 
 
@@ -233,7 +237,9 @@ def test_create_account_with_valid_private_key_missing_prefix_still_saves(
             private_key,
         ],
     )
-    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
+    mock_account_module.set_private_key.assert_called_once_with(
+        TEST_PRIVATE_KEY, mocker.ANY
+    )
     assert "Would you like to set a private key?" not in result.output
 
 
@@ -349,7 +355,9 @@ def test_update_account_if_user_agrees_and_valid_connection_sets_private_key(
             "--disable-ssl-errors",
         ],
     )
-    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
+    mock_account_module.set_private_key.assert_called_once_with(
+        TEST_PRIVATE_KEY, mocker.ANY
+    )
 
 
 def test_update_account_if_missing_key_prefix_user_agrees_and_valid_connection_sets_private_key(
@@ -377,7 +385,9 @@ def test_update_account_if_missing_key_prefix_user_agrees_and_valid_connection_s
             "--disable-ssl-errors",
         ],
     )
-    mock_account_module.set_private_key.assert_called_once_with(TEST_PRIVATE_KEY, mocker.ANY)
+    mock_account_module.set_private_key.assert_called_once_with(
+        TEST_PRIVATE_KEY, mocker.ANY
+    )
 
 
 def test_delete_account_warns_if_deleting_default(runner, mock_account_module):

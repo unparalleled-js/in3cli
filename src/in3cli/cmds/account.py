@@ -1,15 +1,13 @@
 import click
-from click import echo
-from click import secho
-
 import in3cli.account as account_module
+from click import echo
+from in3cli.client import validate
 from in3cli.enums import Chain
 from in3cli.error import In3CliError
 from in3cli.options import address_option
 from in3cli.options import yes_option
 from in3cli.private_key import get_private_key_from_prompt
 from in3cli.util import does_user_agree
-from in3cli.client import validate
 
 
 @click.group()
