@@ -140,9 +140,7 @@ class ConfigAccessor:
     def _create_internal_section(self):
         self.parser.add_section(self._INTERNAL_SECTION)
         self.parser[self._INTERNAL_SECTION] = {}
-        self.parser[self._INTERNAL_SECTION][
-            self.DEFAULT_ACCOUNT_KEY
-        ] = self.DEFAULT_VALUE
+        self.parser[self._INTERNAL_SECTION][self.DEFAULT_ACCOUNT_KEY] = self.DEFAULT_VALUE
 
     def _create_account_section(self, name):
         account = {

@@ -159,9 +159,7 @@ def find_format_width(record, header, include_header=True):
         for header_key in header.keys():
             item = record_row.get(header_key)
             row[header_key] = item
-            max_width_item[header_key] = max(
-                max_width_item[header_key], str(item), key=len
-            )
+            max_width_item[header_key] = max(max_width_item[header_key], str(item), key=len)
         rows.append(row)
     column_size = {key: len(value) for key, value in max_width_item.items()}
     return rows, column_size
@@ -201,10 +199,7 @@ def format_string_list_to_columns(string_list, max_width=None):
     column_width = len(max(string_list, key=len)) + _PADDING_SIZE
     num_columns = int(max_width / column_width) or 1
     format_string = "{{:<{0}}}".format(column_width) * num_columns
-    batches = [
-        string_list[i : i + num_columns]
-        for i in range(0, len(string_list), num_columns)
-    ]
+    batches = [string_list[i : i + num_columns] for i in range(0, len(string_list), num_columns)]
     padding = ["" for _ in range(num_columns)]
     for batch in batches:
         click.echo(format_string.format(*batch + padding))

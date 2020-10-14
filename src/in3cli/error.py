@@ -16,9 +16,7 @@ class In3CliArgumentError(In3CliError):
 
     def __init__(self, args):
         args_str = ", ".join(args)
-        err_text = "The following arguments cannot be used together: {}.".format(
-            args_str
-        )
+        err_text = "The following arguments cannot be used together: {}.".format(args_str)
         super().__init__(err_text)
 
 

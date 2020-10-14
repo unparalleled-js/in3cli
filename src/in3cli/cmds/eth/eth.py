@@ -97,9 +97,7 @@ def _handle_hash_and_block_num_incompat(hash, block_num):
 
 def _get_block_by_num(client, block_num):
     """Fixes issue where block is not available from initial call."""
-    return run_with_timeout(
-        lambda: client.block_by_number(block_num, get_full_block=True)
-    )
+    return run_with_timeout(lambda: client.block_by_number(block_num, get_full_block=True))
 
 
 @click.group()

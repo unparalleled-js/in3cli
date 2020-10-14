@@ -123,11 +123,11 @@ def use(account_name):
 @account_name_arg
 def delete(account_name):
     """Deletes an account and its stored private key (if any)."""
-    message = "\nDeleting this account will also delete any stored private keys. Are you sure? (y/n): "
+    message = (
+        "\nDeleting this account will also delete any stored private keys. Are you sure? (y/n): "
+    )
     if account_module.is_default_account(account_name):
-        message = "\n'{}' is currently the default account!\n{}".format(
-            account_name, message
-        )
+        message = "\n'{}' is currently the default account!\n{}".format(account_name, message)
     if does_user_agree(message):
         account_module.delete_account(account_name)
         echo("Account '{}' has been deleted.".format(account_name))
